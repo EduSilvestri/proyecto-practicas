@@ -39,3 +39,4 @@
     <a href="{{ route('tickets.index') }}" class="text-blue-500 mt-4 inline-block">Volver a la lista</a>
 @endsection
 
+

@@ -4,7 +4,6 @@
 
 @section('content')
     <h2 class="text-2xl font-bold mb-4">Mis Tickets</h2>
-    <a href="{{ route('tickets.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Crear Ticket</a>
 
     @if(session('exito'))
         <p class="text-green-500">{{ session('exito') }}</p>
