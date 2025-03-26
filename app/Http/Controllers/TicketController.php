@@ -24,21 +24,34 @@ class TicketController extends Controller
     
     public function store(Request $request)
     {
-        $request->validate([
-            'titulo' => 'required|string|max:200',
+        $data = $request->validate([
+            'usuario_id'  => 'required|exists:users,id',
+            'asunto'      => 'required|string|max:255',
+            'tipo'        => 'required|string',
             'descripcion' => 'required|string',
-            'prioridad' => 'required|in:baja,media,alta'
+            // Aquí podrías validar archivos si lo necesitas
         ]);
+    
+        // Asigna un estado por defecto y prioridad si es necesario
+        $data['estado'] = 'abierto';
+        $data['prioridad'] = 'media';
 
-        Ticket::create([
-            'usuario_id' => Auth::id(),
-            'titulo' => $request->titulo,
-            'descripcion' => $request->descripcion,
-            'estado' => 'abierto',
-            'prioridad' => $request->prioridad,
-        ]);
-        return redirect()->route('tickets.index')->with('exito','Ticket creado correctamente.');
+        if ($request->hasFile('archivos')) {
+            $archivos = [];
+            foreach ($request->file('archivos') as $archivo) {
+                // Guarda el archivo en la carpeta "tickets" dentro del disco "public"
+                $path = $archivo->store('tickets', 'public');
+                $archivos[] = $path;
+            }
+            // Guarda las rutas de los archivos en formato JSON
+            $data['archivos'] = json_encode($archivos);
+        }
+    
+        Ticket::create($data);
+    
+        return redirect()->route('tickets.index')->with('success', 'Ticket creado correctamente.');
     }
+    
 
     
     public function show(Ticket $ticket)

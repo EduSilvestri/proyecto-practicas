@@ -9,16 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
-            $table->string('titulo');
-            $table->text('descripcion');
+            $table->unsignedBigInteger('usuario_id');
+            $table->string('asunto');       
+            $table->string('tipo');         
+            $table->text('descripcion');    
             $table->enum('estado', ['abierto', 'en_progreso', 'cerrado'])->default('abierto');
             $table->enum('prioridad', ['baja', 'media', 'alta'])->default('media');
+            $table->json('archivos')->nullable();
             $table->timestamps();
+    
+            // Define la clave foránea
+            $table->foreign('usuario_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
