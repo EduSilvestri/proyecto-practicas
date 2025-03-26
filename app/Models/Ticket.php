@@ -10,7 +10,7 @@ class Ticket extends Model
     use HasFactory;
 
     protected $fillable = [
-        'usuario_id', 'titulo', 'descripcion', 'estado'
+        'usuario_id', 'titulo', 'descripcion', 'estado', 'prioridad'
     ];
 
     // Relación con el usuario que creó el ticket

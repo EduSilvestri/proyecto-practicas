@@ -43,13 +43,13 @@ class TicketController extends Controller
     
     public function show(Ticket $ticket)
     {
-        return view('ticket.show', compact('ticket'));
+        return view('tickets.show', compact('ticket'));
     }
 
     
     public function edit(Ticket $ticket)
     {
-        return view('ticket.edit', compact('ticket'));
+        return view('tickets.edit', compact('ticket'));
     }
 
     
@@ -63,7 +63,7 @@ class TicketController extends Controller
         ]);
         $ticket->update($request->all());
 
-        return redirect()->route('ticket.index')->with('exito','Ticket actualizado correctamente.');
+        return redirect()->route('tickets.index')->with('exito','Ticket actualizado correctamente.');
     }
 
     
