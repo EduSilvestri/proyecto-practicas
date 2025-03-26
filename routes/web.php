@@ -25,3 +25,5 @@ Route::middleware([
 Route::middleware(['auth'])->group(function () {
     Route::resource('tickets', TicketController::class);
 });
+
+Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
