@@ -10,7 +10,7 @@
             background-color: #202617;
         }
         .navbar-brand img {
-            height: 40px; /* Ajusta el tamaño del logo */
+            height: 40px;
             margin-right: 10px;
         }
         .navbar-text {
@@ -20,8 +20,7 @@
             flex-grow: 1;
             text-align: center;
         }
-                /* Estilos del botón flotante */
-                .floating-btn {
+        .floating-btn {
             position: fixed;
             bottom: 20px;
             left: 20px;
@@ -37,21 +36,34 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s;
         }
         .floating-btn:hover {
             background-color: #202617;
-            color: white
+            color: white;
+        }
+        .form-container {
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            width: 250px;
+        }
+        .show {
+            display: block !important;
         }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-custom">
+    <nav class="navbar navbar-custom">
         <div class="container d-flex align-items-center">
-            <!-- Logo -->
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="{{ asset('img/logo.png') }}" alt="Logo" height="40"> <!-- Reemplaza con tu logo -->
+                <img src="{{ asset('img/logo.png') }}" alt="Logo" height="40">
             </a>
-            <!-- Texto centrado -->
             <span class="navbar-text">Pantalla principal</span>
         </div>
     </nav>
@@ -60,34 +72,27 @@
         <h1>Página de Inicio</h1>
     </div>
 
-    <button class="floating-btn" data-bs-toggle="modal" data-bs-target="#formModal">
-        +
-    </button>
-
-    <!-- Modal con el Formulario -->
-    <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModalLabel">Formulario</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="name" placeholder="Tu nombre">
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo</label>
-                            <input type="email" class="form-control" id="email" placeholder="tu@email.com">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <button class="floating-btn" id="toggleForm">+</button>
     
+    <div class="form-container" id="floatingForm">
+        <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="name" placeholder="Tu nombre">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo</label>
+                <input type="email" class="form-control" id="email" placeholder="tu@email.com">
+            </div>
+            <button type="submit" class="btn btn-primary">Mandar ticket</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('toggleForm').addEventListener('click', function() {
+            var form = document.getElementById('floatingForm');
+            form.classList.toggle('show');
+        });
+    </script>
 </body>
 </html>
