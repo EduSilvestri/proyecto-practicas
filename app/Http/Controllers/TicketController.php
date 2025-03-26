@@ -15,13 +15,6 @@ class TicketController extends Controller
         return view('tickets.index', compact('tickets'));
     }
 
-    
-    public function create()
-    {
-        return view('tickets.create');
-    }
-
-    
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -36,14 +29,38 @@ class TicketController extends Controller
         $data['estado'] = 'abierto';
         $data['prioridad'] = 'media';
 
+        $archivos = [];
+
+        // Procesa los archivos adjuntos enviados a través del input "archivos[]"
         if ($request->hasFile('archivos')) {
-            $archivos = [];
             foreach ($request->file('archivos') as $archivo) {
-                // Guarda el archivo en la carpeta "tickets" dentro del disco "public"
                 $path = $archivo->store('tickets', 'public');
                 $archivos[] = $path;
             }
-            // Guarda las rutas de los archivos en formato JSON
+        }
+    
+        // Procesa la captura de pantalla enviada en el campo "screenshot"
+        if ($request->filled('screenshot')) {
+            // El dato viene con el prefijo "data:image/png;base64,...."
+            $screenshotData = $request->input('screenshot');
+            if (preg_match('/^data:image\/(\w+);base64,/', $screenshotData, $type)) {
+                $screenshotData = substr($screenshotData, strpos($screenshotData, ',') + 1);
+                $type = strtolower($type[1]); // p.ej. png
+                $screenshotData = base64_decode($screenshotData);
+                if ($screenshotData === false) {
+                    return back()->withErrors(['screenshot' => 'La captura no es válida.']);
+                }
+            } else {
+                return back()->withErrors(['screenshot' => 'Formato de captura inválido.']);
+            }
+            // Guarda la imagen en "public/tickets" con un nombre único
+            $screenshotName = 'tickets/' . uniqid() . '.' . $type;
+            \Storage::disk('public')->put($screenshotName, $screenshotData);
+            $archivos[] = $screenshotName;
+        }
+    
+        // Si se han subido archivos o se generó una captura, guarda las rutas como JSON
+        if (count($archivos) > 0) {
             $data['archivos'] = json_encode($archivos);
         }
     
