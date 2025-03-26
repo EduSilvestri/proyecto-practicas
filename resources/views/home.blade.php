@@ -27,10 +27,10 @@
             background-color: #efe300;
             color: #202617;
             border: none;
-            border-radius: 50%;
-            width: 60px;
+            border-radius: 30px;
+            width: 160px;
             height: 60px;
-            font-size: 24px;
+            font-size: 17px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -72,7 +72,9 @@
         <h1>Página de Inicio</h1>
     </div>
 
-    <button class="floating-btn" id="toggleForm">+</button>
+    <button class="floating-btn" id="toggleForm">
+        ¿Necesitas ayuda?
+    </button>
     
     <div class="form-container" id="floatingForm">
         <form>
