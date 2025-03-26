@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title', 'Home - Laravel')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -136,6 +139,6 @@
   </script>
 </body>
 </html>
-
+@endsection
 
 
