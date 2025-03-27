@@ -53,9 +53,31 @@
     .show {
       display: block !important;
     }
+        /* Estilo para el logo y texto centrados */
+        .center-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* Ocupa toda la altura de la pantalla */
+    }
+    .center-content img {
+      margin-bottom: 20px;
+      height: 100px;
+    }
+    .center-content h1 {
+      font-size: 3rem; /* Título grande */
+      text-align: center;
+      color: #202617;
+    }
   </style>
 </head>
 <body>
+
+  <div class="center-content">
+    <img src="{{ asset('img/logo_negro.png') }}" alt="Logo"> <!-- Reemplaza con la ruta de tu logo -->
+    <h1>Bienvenido a Lujo Network</h1>
+  </div>
 
   <button class="floating-btn" id="toggleForm">
     ¿Necesitas ayuda?
