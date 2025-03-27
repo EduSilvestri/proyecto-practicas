@@ -71,9 +71,9 @@ class TicketController extends Controller
             $data['archivos'] = json_encode($archivos);
         }
     
-        Ticket::create($data);
+        $ticket = Ticket::create($data);
     
-        return redirect()->route('tickets.index')->with('success', 'Ticket creado correctamente.');
+        return redirect()->route('tickets.show', $ticket->id)->with('success', 'Ticket creado correctamente.');
     }
     
 
