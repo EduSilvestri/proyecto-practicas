@@ -3,7 +3,7 @@
 @section('title', 'Mis Tickets')
 
 @section('content')
-    <h2 class="text-2xl font-bold mb-4">Mis Tickets</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center mt-5">Mis Tickets</h2>
 
     @if(session('exito'))
         <p class="text-green-500">{{ session('exito') }}</p>
