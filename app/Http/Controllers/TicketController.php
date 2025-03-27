@@ -9,18 +9,40 @@ use Illuminate\Support\Facades\Auth;
 class TicketController extends Controller
 {
     
-    public function index()
-{
-    if (Auth::user()->rol === 'usuario') {
-        // Usuario normal: sólo puede ver sus propios tickets
-        $tickets = Ticket::where('usuario_id', Auth::id())->paginate(10);
-        return view('tickets.user-index', compact('tickets'));
-    } else {
-        // Administrador o técnico: puede ver todos los tickets
-        $tickets = Ticket::paginate(10);
-        return view('tickets.index', compact('tickets'));
+    public function index(Request $request)
+    {
+        if (Auth::user()->rol === 'usuario') {
+            // Usuario normal: solo puede ver sus propios tickets que estén en estado "abierto" o "en_progreso"
+            $tickets = Ticket::where('usuario_id', Auth::id())
+                             ->whereIn('estado', ['abierto', 'en_progreso'])
+                             ->paginate(10);
+            return view('tickets.user-index', compact('tickets'));
+        } else {
+            // Administrador o técnico: puede ver todos los tickets y filtrarlos
+            $query = Ticket::query();
+    
+            // Filtrar por asunto (por defecto)
+            if ($request->filled('q')) {
+                $q = $request->input('q');
+                $query->where('asunto', 'like', "%{$q}%");
+            }
+    
+            // Filtrar por tipo
+            if ($request->filled('tipo')) {
+                $query->where('tipo', $request->input('tipo'));
+            }
+    
+            // Filtrar por estado
+            if ($request->filled('estado')) {
+                $query->where('estado', $request->input('estado'));
+            }
+    
+            $tickets = $query->paginate(10)->appends($request->query());
+            return view('tickets.index', compact('tickets'));
+        }
     }
-}
+    
+    
 
     public function store(Request $request)
     {
@@ -92,15 +114,19 @@ class TicketController extends Controller
     
     public function update(Request $request, Ticket $ticket)
     {
-        $request->validate([
-            'titulo' => 'required|string|max:200',
-            'descripcion' => 'required|string',
-            'estado' => 'required|in:abierto,en_progreso,cerrado',
-            'prioridad' => 'required|in:baja,media,alta'
+        $validatedData = $request->validate([
+            // 'titulo' => 'required',        
+            // 'descripcion' => 'required',   
+            'estado' => 'required',
+            'prioridad' => 'required',
         ]);
-        $ticket->update($request->all());
-
-        return redirect()->route('tickets.index')->with('exito','Ticket actualizado correctamente.');
+    
+        // Actualizas sólo los campos modificables
+        $ticket->estado = $validatedData['estado'];
+        $ticket->prioridad = $validatedData['prioridad'];
+        $ticket->save();
+    
+        return redirect()->route('tickets.index')->with('success', 'Ticket actualizado correctamente.');
     }
 
     
