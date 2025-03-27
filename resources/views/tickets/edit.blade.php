@@ -20,8 +20,8 @@
         @method('PUT')
 
         <div>
-            <label class="block">Título</label>
-            <input type="text" name="titulo" value="{{ old('titulo', $ticket->titulo) }}" class="border rounded p-2 w-full" required>
+            <label class="block">Asunto</label>
+            <input type="text" name="asunto" value="{{ old('titulo', $ticket->asunto) }}" class="border rounded p-2 w-full" required>
         </div>
         <div>
             <label class="block">Descripción</label>
