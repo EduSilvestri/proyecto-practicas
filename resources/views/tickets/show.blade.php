@@ -63,7 +63,7 @@
                             @foreach($files as $file)
                                 <div class="text-white">
                                     @if(in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
-                                        <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px;" class="mb-2">
+                                        <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px;" class="mb-2 cursor-pointer" onclick="openModal('{{ asset('storage/' . $file) }}')">
                                     @else
                                         <a href="{{ asset('storage/' . $file) }}" target="_blank" class="text-lujoYel hover:underline">{{ $file }}</a>
                                     @endif
@@ -128,7 +128,7 @@
                             @foreach($files as $file)
                                 <div class="text-white">
                                     @if(in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
-                                        <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px;" class="mb-2 cursor-pointer p-2" onclick="openModal('{{ asset('storage/' . $file) }}')">
+                                        <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px; padding: 2%;" class="mb-2 cursor-pointer" onclick="openModal('{{ asset('storage/' . $file) }}')">
                                       
                                     @else
                                         <a href="{{ asset('storage/' . $file) }}" target="_blank" class="text-lujoYel hover:underline">{{ $file }}</a>
@@ -151,29 +151,6 @@
                 </a>
             </div>
             @endif
-        </div>
-    </div>
-
-    <!-- Modal para mostrar la imagen grande -->
-    <div id="imageModal" class="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 hidden">
-        <div class="relative bg-black p-4 rounded-lg w-[600px] h-auto">
-        <div class="flex justify-end">
-                <!-- Botón de cerrar -->
-                <button onclick="closeModal()" class="px-6 py-2 text-black font-semibold rounded-lg bg-lujoYel">
-                    Cerrar
-                </button>
-            </div>
-
-            <!-- Imagen dentro del modal -->
-            <div style="width: 100%; display: flex; justify-content: center; overflow: hidden;">
-                <img id="modalImage" src="" alt="Imagen grande" style="width: 900px; height: 600px; object-fit: contain; margin: 0 auto;">
-            </div>
-
-            <div class="flex justify-center">
-                <a id="downloadLink" href="" download class="px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
-                    Descargar Imagen
-                </a>
-            </div>
             <div class="mt-8">
                 <h3 class="text-xl font-semibold text-white text-center">Conversación</h3>
                 <div class="bg-gray-700 p-4 rounded">
@@ -195,6 +172,31 @@
                    <button type="submit" class="mt-2 w-full px-4 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">Enviar Mensaje</button>
                 </form>
              </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Modal para mostrar la imagen grande -->
+    <div id="imageModal" class="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 hidden">
+        <div class="relative bg-black p-4 rounded-lg w-[600px] h-auto">
+        <div class="flex justify-end">
+                <!-- Botón de cerrar -->
+                <button onclick="closeModal()" class="px-6 py-2 text-black font-semibold rounded-lg bg-lujoYel">
+                    Cerrar
+                </button>
+            </div>
+
+            <!-- Imagen dentro del modal -->
+            <div style="width: 100%; display: flex; justify-content: center; overflow: hidden;">
+                <img id="modalImage" src="" alt="Imagen grande" style="width: 900px; height: 600px; object-fit: contain; margin: 0 auto;">
+            </div>
+
+            <div class="flex justify-center">
+                <a id="downloadLink" href="" download class="px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
+                    Descargar Imagen
+                </a>
+            </div>
         </div>
     </div>
 
