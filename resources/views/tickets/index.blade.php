@@ -4,10 +4,10 @@
 
 @section('content')
 <div class="flex flex-col items-center">
-    <h2 class="text-2xl font-bold mb-4">Mis Tickets</h2>
+    <h2 class="mt-5 text-2xl font-bold mb-4">Mis Tickets</h2>
     
     <!-- Caja del formulario con borde -->
-    <div class="border bg-lujoNeg rounded p-4 w-[70%] mb-4">
+    <div class="bg-lujoNeg rounded p-4 w-[70%] mb-4">
       <!-- Formulario de búsqueda y filtrado -->
       <form method="GET" action="{{ route('tickets.index') }}">
         <div class="flex flex-wrap gap-4 justify-center">
