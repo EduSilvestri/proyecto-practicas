@@ -18,6 +18,7 @@ export default {
             },
             colors: {
                 lujoYel: "#efe300",
+                lujoNeg: "#202617"
             },
         },
     },
