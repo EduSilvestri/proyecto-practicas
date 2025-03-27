@@ -16,6 +16,10 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                lujoYel: "#efe300",
+                lujoNeg: "#202617"
+            },
         },
     },
 

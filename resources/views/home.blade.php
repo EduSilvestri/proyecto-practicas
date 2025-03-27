@@ -1,3 +1,8 @@
+@extends('layouts.app')
+
+@section('title', 'Home - Laravel')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,20 +11,6 @@
   <title>Home - Laravel</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    .navbar-custom {
-      background-color: #202617;
-    }
-    .navbar-brand img {
-      height: 40px;
-      margin-right: 10px;
-    }
-    .navbar-text {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: white;
-      flex-grow: 1;
-      text-align: center;
-    }
     .floating-btn {
       position: fixed;
       bottom: 20px;
@@ -65,18 +56,6 @@
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-custom">
-    <div class="container d-flex align-items-center">
-      <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-        <img src="{{ asset('img/logo.png') }}" alt="Logo">
-      </a>
-      <span class="navbar-text">Pantalla principal</span>
-    </div>
-  </nav>
-
-  <div class="container text-center mt-5">
-    <h1>Página de Inicio</h1>
-  </div>
 
   <button class="floating-btn" id="toggleForm">
     ¿Necesitas ayuda?
@@ -161,3 +140,6 @@
   </script>
 </body>
 </html>
+@endsection
+
+

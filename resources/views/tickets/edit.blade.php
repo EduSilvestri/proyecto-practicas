@@ -3,7 +3,7 @@
 @section('title', 'Editar Ticket')
 
 @section('content')
-    <h2 class="text-2xl font-bold mb-4">Editar Ticket</h2>
+    <h2 class="text-2xl font-bold mb-4">{{ old('titulo', $ticket->asunto) }}</h2>
 
     @if ($errors->any())
         <div class="bg-red-200 text-red-600 p-2 mb-4">
@@ -20,12 +20,8 @@
         @method('PUT')
 
         <div>
-            <label class="block">Título</label>
-            <input type="text" name="titulo" value="{{ old('titulo', $ticket->titulo) }}" class="border rounded p-2 w-full" required>
-        </div>
-        <div>
             <label class="block">Descripción</label>
-            <textarea name="descripcion" rows="4" class="border rounded p-2 w-full" required>{{ old('descripcion', $ticket->descripcion) }}</textarea>
+            <label class="block">{{ old('descripcion', $ticket->descripcion) }}</label>
         </div>
         <div>
             <label class="block">Estado</label>

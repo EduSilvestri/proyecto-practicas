@@ -11,7 +11,7 @@ class TicketController extends Controller
     
     public function index()
     {
-        $tickets = Ticket::where('usuario_id', Auth::id())->paginate(10);
+        $tickets = Ticket::paginate(10);
         return view('tickets.index', compact('tickets'));
     }
 
