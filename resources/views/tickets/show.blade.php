@@ -68,6 +68,27 @@
                     Volver a la lista
                 </a>
             </div>
+            <div class="mt-8">
+                <h3 class="text-xl font-semibold text-white text-center">Conversación</h3>
+                <div class="bg-gray-700 p-4 rounded">
+                     @forelse ($ticket->messages as $message)
+                          <div class="mb-2">
+                             <strong class="text-lujoYel">{{ $message->user->name }}:</strong>
+                             <span class="text-white">{{ $message->content }}</span>
+                             <small class="block text-gray-400">{{ $message->created_at->diffForHumans() }}</small>
+                          </div>
+                     @empty
+                          <p class="text-white">No hay mensajes en esta conversación.</p>
+                     @endforelse
+                </div>
+            </div>
+            <div class="mt-4">
+                <form action="{{ route('tickets.message.store', $ticket->id) }}" method="POST">
+                   @csrf
+                   <textarea name="content" class="w-full p-2 rounded" placeholder="Escribe tu mensaje..." rows="3"></textarea>
+                   <button type="submit" class="mt-2 w-full px-4 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">Enviar Mensaje</button>
+                </form>
+             </div>
         </div>
     </div>
 @endsection
