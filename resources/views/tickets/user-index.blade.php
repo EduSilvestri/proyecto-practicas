@@ -27,9 +27,7 @@
                     <td class="border p-2 text-center">{{ ucfirst($ticket->estado) }}</td>
                     <td class="border p-2 text-center">{{ ucfirst($ticket->prioridad) }}</td>
                     <td class="border p-2 text-center">{{ ucfirst($ticket->tipo) }}</td>
-                    <td class="border p-2 text-center">
-                        {{ $ticket->created_at->format('d/m/Y H:i') }}
-                    </td>
+                    <td class="border p-2 text-center">{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
                     <td class="border p-2 text-center">
                         <a href="{{ route('tickets.show', $ticket) }}" class="text-blue-500">Ver</a>
                     </td>
@@ -38,4 +36,5 @@
         </tbody>
     </table>
 @endsection
+
 

@@ -15,14 +15,14 @@
         </div>
     @endif
 
+    <!-- Campos ocultos para mantener el título y la descripción -->
+    <input type="hidden" name="titulo" value="{{ old('titulo', $ticket->asunto) }}">
+    <input type="hidden" name="descripcion" value="{{ old('descripcion', $ticket->descripcion) }}">
+
     <form action="{{ route('tickets.update', $ticket) }}" method="POST" class="space-y-4">
         @csrf
         @method('PUT')
 
-        <div>
-            <label class="block">Descripción</label>
-            <label class="block">{{ old('descripcion', $ticket->descripcion) }}</label>
-        </div>
         <div>
             <label class="block">Estado</label>
             <select name="estado" class="border rounded p-2 w-full" required>
@@ -45,3 +45,4 @@
 
     <a href="{{ route('tickets.index') }}" class="text-blue-500 mt-4 inline-block">Volver a la lista</a>
 @endsection
+
