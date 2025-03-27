@@ -11,7 +11,14 @@ class TicketController extends Controller
     
     public function index()
     {
-        $tickets = Ticket::paginate(10);
+            // Comprobar si el usuario es admin
+        if (auth()->user()->isAdmin()) {
+        // Si es admin, mostrar todos los tickets
+            $tickets = Ticket::paginate(10);
+        } else {
+        // Si no es admin, mostrar solo los tickets del usuario autenticado
+            $tickets = Ticket::where('usuario_id', auth()->id())->paginate(10);
+        }
         return view('tickets.index', compact('tickets'));
     }
 
