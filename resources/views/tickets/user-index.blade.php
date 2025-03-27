@@ -31,16 +31,11 @@
                         {{ $ticket->created_at->format('d/m/Y H:i') }}
                     </td>
                     <td class="border p-2 text-center">
-                        <a href="{{ route('tickets.show', $ticket) }}" class="text-blue-500">Ver</a> |
-                        <a href="{{ route('tickets.edit', $ticket) }}" class="text-yellow-500">Editar</a> |
-                        <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-500">Eliminar</button>
-                        </form>
+                        <a href="{{ route('tickets.show', $ticket) }}" class="text-blue-500">Ver</a>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 @endsection
+

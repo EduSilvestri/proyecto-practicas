@@ -10,10 +10,17 @@ class TicketController extends Controller
 {
     
     public function index()
-    {
+{
+    if (Auth::user()->rol === 'usuario') {
+        // Usuario normal: sólo puede ver sus propios tickets
+        $tickets = Ticket::where('usuario_id', Auth::id())->paginate(10);
+        return view('tickets.user-index', compact('tickets'));
+    } else {
+        // Administrador o técnico: puede ver todos los tickets
         $tickets = Ticket::paginate(10);
         return view('tickets.index', compact('tickets'));
     }
+}
 
     public function store(Request $request)
     {
