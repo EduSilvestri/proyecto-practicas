@@ -12,7 +12,7 @@
     <table class="w-full mt-4 border-collapse border">
         <thead>
             <tr class="bg-lujoNeg text-white">
-                <th class="border p-2">Título</th>
+                <th class="border p-2">Asunto</th>
                 <th class="border p-2">Estado</th>
                 <th class="border p-2">Prioridad</th>
                 <th class="border p-2">Tipo</th>
