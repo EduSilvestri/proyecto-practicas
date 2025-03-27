@@ -8,6 +8,10 @@
         <div class="bg-lujoNeg p-6 rounded-lg shadow-lg w-[80%] ">
             <h2 class="text-2xl font-bold mb-4 text-center text-white">{{ $ticket->asunto }}</h2>
 
+
+            <form action="{{ route('tickets.update', $ticket) }}" method="POST">
+            @csrf
+            @method('PUT')
             <!-- Tabla para mostrar los detalles del ticket -->
             <table class="w-full mt-4 border-collapse border">
                 <thead>
@@ -19,13 +23,25 @@
                         <th class="border p-2">Fecha de Creación</th>
                     </tr>
                 </thead>
-                <tbody class="bg-gray-800 text-white">
+                <tbody class="bg-gray-800">
                     <tr class="border">
                         <!-- <td class="border p-2">{{ $ticket->descripcion }}</td> -->
-                        <td class="border p-2 text-center">{{ ucfirst($ticket->estado) }}</td>
-                        <td class="border p-2 text-center">{{ ucfirst($ticket->prioridad) }}</td>
-                        <td class="border p-2 text-center">{{ ucfirst($ticket->tipo) }}</td>
-                        <td class="border p-2 text-center">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
+                        <td class="border p-2 text-center text-black">
+                        <select name="estado" class="border rounded p-2 w-full" required>
+                            <option value="abierto" {{ old('estado', $ticket->estado) == 'abierto' ? 'selected' : '' }}>Abierto</option>
+                            <option value="en_progreso" {{ old('estado', $ticket->estado) == 'en_progreso' ? 'selected' : '' }}>En Progreso</option>
+                            <option value="cerrado" {{ old('estado', $ticket->estado) == 'cerrado' ? 'selected' : '' }}>Cerrado</option>
+                        </select>
+                        </td>
+                        <td class="border p-2 text-center">
+                            <select name="prioridad" class="border rounded p-2 w-full" required>
+                                <option value="baja" {{ old('prioridad', $ticket->prioridad) == 'baja' ? 'selected' : '' }}>Baja</option>
+                                <option value="media" {{ old('prioridad', $ticket->prioridad) == 'media' ? 'selected' : '' }}>Media</option>
+                                <option value="alta" {{ old('prioridad', $ticket->prioridad) == 'alta' ? 'selected' : '' }}>Alta</option>
+                            </select>
+                        </td>
+                        <td class="border p-2 text-center text-white">{{ ucfirst($ticket->tipo) }}</td>
+                        <td class="border p-2 text-center text-white">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -67,7 +83,11 @@
                 <a href="{{ route('tickets.index') }}" class="inline-block px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
                     Volver a la lista
                 </a>
+                <button type="submit" class="px-6 py-2 bg-lujoYel text-black font-semibold rounded-lg hover:bg-blue-800 transition">
+                    Guardar cambios
+                </button>
             </div>
+            </form>
         </div>
     </div>
 @endsection
