@@ -22,7 +22,7 @@ class Ticket extends Model
     // Relación con el usuario que creó el ticket
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 
     public function messages()
