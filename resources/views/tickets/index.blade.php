@@ -15,34 +15,39 @@
           <div>
             <input type="text" name="q" value="{{ request('q') }}" placeholder="Buscar por asunto" class="border rounded p-2">
           </div>
-          <!-- Filtrar por tipo -->
-          <div>
-            <select name="tipo" class="border rounded p-2">
-              <option value="">Tipos</option>
-              <option value="Preguntas generales" {{ request('tipo') == 'Preguntas generales' ? 'selected' : '' }}>Preguntas generales</option>
-              <option value="Problemas de lanzamiento" {{ request('tipo') == 'Problemas de lanzamiento' ? 'selected' : '' }}>Problemas de lanzamiento</option>
-              <option value="Problemas de Pagina Web" {{ request('tipo') == 'Problemas de Pagina Web' ? 'selected' : '' }}>Problemas de Pagina Web</option>
-              <option value="Pagos" {{ request('tipo') == 'Pagos' ? 'selected' : '' }}>Pagos</option>
-              <option value="Peticion de Actualizacion de Lanzamiento" {{ request('tipo') == 'Peticion de Actualizacion de Lanzamiento' ? 'selected' : '' }}>Peticion de Actualizacion de Lanzamiento</option>
-              <option value="Peticion de Takedown" {{ request('tipo') == 'Peticion de Takedown' ? 'selected' : '' }}>Peticion de Takedown</option>
-              <option value="Peticion de Copyright" {{ request('tipo') == 'Peticion de Copyright' ? 'selected' : '' }}>Peticion de Copyright</option>
-            </select>
-          </div>
-          <!-- Filtrar por estado -->
-          <div>
-            <select name="estado" class="border rounded p-2">
-              <option value="">Estados</option>
-              <option value="abierto" {{ request('estado') == 'abierto' ? 'selected' : '' }}>Abierto</option>
-              <option value="en_progreso" {{ request('estado') == 'en_progreso' ? 'selected' : '' }}>En Progreso</option>
-              <option value="cerrado" {{ request('estado') == 'cerrado' ? 'selected' : '' }}>Cerrado</option>
-            </select>
-          </div>
           <!-- Botón de búsqueda -->
           <div>
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Buscar</button>
           </div>
         </div>
       </form>
+    </div>
+
+    <div class="flex flex-wrap gap-4 justify-center">
+    <div>
+      <form action="{{ route('tickets.index') }}" method="GET">
+        <input type="hidden" name="estado" value="">
+        <button type="submit" class="bg-lujoNeg text-white px-4 py-2 rounded">Todos los tickets</button>
+      </form>
+      </div>
+      <div>
+      <form action="{{ route('tickets.index') }}" method="GET">
+        <input type="hidden" name="estado" value="abierto">
+        <button type="submit" class="bg-lujoNeg text-white px-4 py-2 rounded">Tickets abiertos</button>
+      </form>
+      </div>
+      <div>
+      <form method="GET" action="{{ route('tickets.index') }}">
+      <input type="hidden" name="estado" value="en_progreso">
+        <button type="submit" class="bg-lujoNeg text-white px-4 py-2 rounded">Tickets en progreso</button>
+      </form>
+      </div>
+      <div>
+      <form method="GET" action="{{ route('tickets.index') }}">
+      <input type="hidden" name="estado" value="cerrado">
+        <button type="submit" class="bg-lujoNeg text-white px-4 py-2 rounded">Tickets cerrados</button>
+      </form>
+      </div>
     </div>
     
     <!-- Aquí iría la tabla debajo de la caja -->
