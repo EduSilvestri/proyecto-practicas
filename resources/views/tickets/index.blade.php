@@ -7,7 +7,7 @@
     <h2 class="mt-5 text-2xl font-bold mb-4">Mis Tickets</h2>
     
     <!-- Caja del formulario con borde -->
-    <div class="bg-lujoNeg rounded p-4 w-[70%] mb-4">
+    <div class="bg-lujoNeg rounded p-4 mb-4">
       <!-- Formulario de búsqueda y filtrado -->
       <form method="GET" action="{{ route('tickets.index') }}">
         <div class="flex flex-wrap gap-4 justify-center">
@@ -60,7 +60,6 @@
       <table class="w-full mt-4 border-collapse border">
           <thead>
               <tr class="bg-lujoNeg text-white">
-                  <th class="border p-2">Usuario</th> 
                   <th class="border p-2">Asunto</th>
                   <th class="border p-2">Estado</th>
                   <th class="border p-2">Prioridad</th>
@@ -72,7 +71,6 @@
           <tbody class="bg-gray-800 text-white">
               @foreach($tickets as $ticket)
                   <tr class="border">
-                      <td class="border p-2 text-center">{{ $ticket->user ? $ticket->user->name : 'Usuario no encontrado' }}</td>
                       <td class="border p-2 text-center">{{ $ticket->asunto }}</td>
                       <td class="border p-2 text-center">{{ ucfirst($ticket->estado) }}</td>
                       <td class="border p-2 text-center">{{ ucfirst($ticket->prioridad) }}</td>
