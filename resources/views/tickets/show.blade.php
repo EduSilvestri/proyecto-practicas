@@ -8,7 +8,7 @@
         <div class="bg-lujoNeg p-6 rounded-lg shadow-lg w-[80%] ">
             <h2 class="text-2xl font-bold mb-4 text-center text-white">{{ $ticket->asunto }}</h2>
 
-            @if(!Auth::user()->isAdmin())
+            @if(!Auth::user()->isUser())
             <form action="{{ route('tickets.update', $ticket) }}" method="POST">
             @csrf
             @method('PUT')
