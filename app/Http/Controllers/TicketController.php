@@ -138,11 +138,13 @@ class TicketController extends Controller
             // 'descripcion' => 'required',   
             'estado' => 'required',
             'prioridad' => 'required',
+            'tipo' => 'required',
         ]);
     
         // Actualizas sólo los campos modificables
         $ticket->estado = $validatedData['estado'];
         $ticket->prioridad = $validatedData['prioridad'];
+        $ticket->tipo = $validatedData['tipo'];
         $ticket->save();
     
         return redirect()->route('tickets.index')->with('success', 'Ticket actualizado correctamente.');
