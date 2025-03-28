@@ -36,8 +36,12 @@ class TicketController extends Controller
             if ($request->filled('estado')) {
                 $query->where('estado', $request->input('estado'));
             }
+
+            $tickets = $query->with('user') // Eager Loading de la relación 'user'
+                         ->paginate(10)
+                         ->appends($request->query());
     
-            $tickets = $query->paginate(10)->appends($request->query());
+            // $tickets = $query->paginate(10)->appends($request->query());
             return view('tickets.index', compact('tickets'));
         }
     }

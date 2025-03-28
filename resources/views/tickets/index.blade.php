@@ -60,6 +60,7 @@
       <table class="w-full mt-4 border-collapse border">
           <thead>
               <tr class="bg-lujoNeg text-white">
+                  <th class="border p-2">Usuario</th> 
                   <th class="border p-2">Asunto</th>
                   <th class="border p-2">Estado</th>
                   <th class="border p-2">Prioridad</th>
@@ -71,6 +72,7 @@
           <tbody class="bg-gray-800 text-white">
               @foreach($tickets as $ticket)
                   <tr class="border">
+                      <td class="border p-2 text-center">{{ $ticket->user ? $ticket->user->name : 'Usuario no encontrado' }}</td>
                       <td class="border p-2 text-center">{{ $ticket->asunto }}</td>
                       <td class="border p-2 text-center">{{ ucfirst($ticket->estado) }}</td>
                       <td class="border p-2 text-center">{{ ucfirst($ticket->prioridad) }}</td>
