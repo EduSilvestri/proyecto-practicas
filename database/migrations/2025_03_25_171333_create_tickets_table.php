@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('asunto');       
             $table->string('tipo');         
             $table->text('descripcion');    
-            $table->enum('estado', ['abierto', 'en_progreso', 'cerrado'])->default('abierto');
+            $table->enum('estado', ['esperando', 'abierto', 'en_progreso', 'cerrado'])->default('esperando');
             $table->enum('prioridad', ['baja', 'media', 'alta'])->default('media');
             $table->json('archivos')->nullable();
             $table->timestamps();

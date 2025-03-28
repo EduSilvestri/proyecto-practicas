@@ -26,8 +26,8 @@
     <div class="flex flex-wrap gap-4 justify-center">
     <div>
       <form action="{{ route('tickets.index') }}" method="GET">
-        <input type="hidden" name="estado" value="">
-        <button type="submit" class="bg-lujoNeg text-white px-4 py-2 rounded">Todos los tickets</button>
+        <input type="hidden" name="estado" value="esperando">
+        <button type="submit" class="bg-lujoNeg text-white px-4 py-2 rounded">Esperando</button>
       </form>
       </div>
       <div>

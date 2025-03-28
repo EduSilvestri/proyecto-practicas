@@ -73,7 +73,7 @@ class TicketController extends Controller
         ]);
     
         // Asigna un estado por defecto y prioridad si es necesario
-        $data['estado'] = 'abierto';
+        $data['estado'] = 'esperando';
         $data['prioridad'] = 'media';
 
         $archivos = [];
