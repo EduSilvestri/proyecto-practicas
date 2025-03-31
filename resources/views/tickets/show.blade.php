@@ -5,7 +5,7 @@
 @section('content')
 <!-- Contenedor para centrar el contenido -->
 <div class="flex justify-center items-center min-h-screen bg-lujoYel-100">
-    <div class="bg-lujoNeg p-6 rounded-lg shadow-lg w-[80%] ">
+    <div class="bg-lujoNeg p-6 rounded-lg shadow-lg w-[80%]">
         <h2 class="text-2xl font-bold mb-4 text-center text-white">{{ $ticket->asunto }}</h2>
 
         @if(!Auth::user()->isUser())
@@ -32,10 +32,10 @@
                                 <option value="en_progreso" {{ old('estado', $ticket->estado) == 'en_progreso' ? 'selected' : '' }}>En Progreso</option>
                                 <option value="cerrado" {{ old('estado', $ticket->estado) == 'cerrado' ? 'selected' : '' }}>Cerrado</option>
                             </select>
-                        <div id="comentarioCierreContainer" class="hidden mt-4">
-                            <label for="comentarioCierre" class="text-white">Comentario de Cierre (Obligatorio)</label>
-                            <textarea id="comentarioCierre" name="comentario" class="border rounded p-2 w-full" placeholder="Ingrese un comentario de cierre"></textarea>
-                        </div>
+                            <div id="comentarioCierreContainer" class="hidden mt-4">
+                                <label for="comentarioCierre" class="text-white">Comentario de Cierre (Obligatorio)</label>
+                                <textarea id="comentarioCierre" name="comentario" class="border rounded p-2 w-full" placeholder="Ingrese un comentario de cierre"></textarea>
+                            </div>
                         </td>
                         <td class="border p-2 text-center">
                             <select name="prioridad" class="border rounded p-2 w-full" required>
@@ -70,22 +70,7 @@
             </table>
 
             <!-- Seccion para el historial de cambios del ticket -->
-            @if(Auth::user()->rol !== 'usuario')
-            <div class="mt-8">
-                <h3 class="text-xl font-semibold text-white text-center">Historial de Cambios</h3>
-                <div class="bg-gray-700 p-4 rounded">
-                    @forelse ($ticket->ticketChanges as $change)
-                    <div class="mb-2">
-                        <strong class="text-lujoYel">{{ $change->user->name }}:</strong>
-                        <span class="text-white">Cambió {{ $change->change_type }} de "{{ $change->old_value }}" a "{{ $change->new_value }}"</span>
-                        <small class="block text-gray-400">{{ $change->created_at->diffForHumans() }}</small>
-                    </div>
-                    @empty
-                    <p class="text-white">No hay cambios registrados para este ticket.</p>
-                    @endforelse
-                </div>
-            </div>
-            @endif
+            
 
             <div class="mt-8">
                 <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
@@ -216,6 +201,32 @@
     </div>
 </div>
 
+<div class="mt-8 bg-lujoNeg p-6 rounded-lg shadow-lg">
+    @if(Auth::user()->rol !== 'usuario')
+            <div class="mt-8">
+                <h3 class="text-xl font-semibold text-white text-center">Historial de Cambios</h3>
+                <div class="bg-gray-700 p-4 rounded">
+                    @forelse ($ticket->ticketChanges as $change)
+                    <div class="mb-2">
+                        <strong class="text-lujoYel">{{ $change->user->name }}:</strong>
+                        <span class="text-white">Cambió {{ $change->change_type }} de "{{ $change->old_value }}" a "{{ $change->new_value }}"</span>
+                        <!-- Verificar si el cambio fue de estado y si el estado fue cerrado -->
+                        @if($change->change_type === 'estado' && $change->new_value === 'cerrado' && $ticket->comentario)
+                        <div class="mt-1 text-white bg-gray-600 rounded">
+                            <strong class="text-lujoYel">Comentario de Cierre:</strong> {{ $ticket->comentario }}
+                        </div>
+                        @endif
+                        <small class="block text-gray-400">{{ $change->created_at->diffForHumans() }}</small>
+
+                    </div>
+                    @empty
+                    <p class="text-white">No hay cambios registrados para este ticket.</p>
+                    @endforelse
+                </div>
+            </div>
+            @endif
+        </div>
+
 
 
 <!-- Modal para mostrar la imagen grande -->
@@ -250,16 +261,16 @@
         document.getElementById('imageModal').classList.remove('hidden'); // Show the modal
     }
 
-        // Función para cerrar el modal
-        function closeModal() {
-            document.getElementById('imageModal').classList.add('hidden'); // Hide the modal
-        }
-        document.addEventListener("DOMContentLoaded", function () {
+    // Función para cerrar el modal
+    function closeModal() {
+        document.getElementById('imageModal').classList.add('hidden'); // Hide the modal
+    }
+    document.addEventListener("DOMContentLoaded", function() {
         let estadoSelect = document.querySelector('select[name="estado"]');
         let comentarioContainer = document.getElementById("comentarioCierreContainer");
         let comentarioInput = document.getElementById("comentarioCierre");
 
-        estadoSelect.addEventListener("change", function () {
+        estadoSelect.addEventListener("change", function() {
             if (this.value === "cerrado") {
                 comentarioContainer.classList.remove("hidden");
                 comentarioInput.setAttribute("required", "required");
@@ -269,6 +280,6 @@
             }
         });
     });
-    </script>
+</script>
 
 @endsection
