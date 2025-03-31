@@ -30,5 +30,10 @@ class Ticket extends Model
         return $this->hasMany(Message::class);
     }
 
+    public function ticketChanges()
+    {
+        return $this->hasMany(TicketChange::class);
+    }
+
     
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TicketChange;
 
 class TicketController extends Controller
 {
@@ -140,6 +141,20 @@ class TicketController extends Controller
             'prioridad' => 'required',
             'tipo' => 'required',
         ]);
+
+        if ($ticket->estado !== $validatedData['estado']) {
+            $this->registerTicketChange($ticket, 'estado', $ticket->estado, $validatedData['estado']);
+        }
+    
+        // Registrar cambios en la prioridad si es necesario
+        if ($ticket->prioridad !== $validatedData['prioridad']) {
+            $this->registerTicketChange($ticket, 'prioridad', $ticket->prioridad, $validatedData['prioridad']);
+        }
+    
+        // Registrar cambios en el tipo si es necesario
+        if ($ticket->tipo !== $validatedData['tipo']) {
+            $this->registerTicketChange($ticket, 'tipo', $ticket->tipo, $validatedData['tipo']);
+        }
     
         // Actualizas sólo los campos modificables
         $ticket->estado = $validatedData['estado'];
@@ -148,6 +163,18 @@ class TicketController extends Controller
         $ticket->save();
     
         return redirect()->route('tickets.index')->with('success', 'Ticket actualizado correctamente.');
+    }
+
+    private function registerTicketChange(Ticket $ticket, $changeType, $oldValue, $newValue)
+    {
+    // Guardar los cambios en la base de datos
+    TicketChange::create([
+        'ticket_id' => $ticket->id,
+        'user_id' => auth()->id(), // Guardamos el ID del usuario que realizó el cambio
+        'change_type' => $changeType, // El tipo de cambio (estado, prioridad, etc.)
+        'old_value' => $oldValue, // Valor anterior
+        'new_value' => $newValue, // Nuevo valor
+    ]);
     }
 
     

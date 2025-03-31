@@ -51,7 +51,7 @@
                         <form action="{{ route('tickets.index') }}" method="GET" class="flex justify-center gap-0 m-0 p-0">
                             <!-- Botón para "Tickets en progreso" -->
                             <input type="hidden" name="estado" value="en_progreso">
-                            <button type="submit" class="px-4 py-2 rounded-r-none">En progreso</button>
+                            <button type="submit" class="px-4 py-2 rounded-r-none">Proceso</button>
                         </form>
                     </th>
                     <th class="border bg-gray-500 text-white px-4 py-2 rounded-l-none border-r-0">
