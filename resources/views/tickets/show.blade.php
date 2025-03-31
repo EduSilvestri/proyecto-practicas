@@ -209,7 +209,8 @@
                     @forelse ($ticket->ticketChanges as $change)
                     <div class="mb-2">
                         <strong class="text-lujoYel">{{ $change->user->name }}:</strong>
-                        <span class="text-white">Cambió {{ $change->change_type }} de "{{ $change->old_value }}" a "{{ $change->new_value }}"</span>
+                        <span class="text-white">Cambió {{ $change->change_type }} de {{ strtoupper($change->old_value) }} a {{ strtoupper($change->new_value) }}</span>
+
                         <!-- Verificar si el cambio fue de estado y si el estado fue cerrado -->
                         @if($change->change_type === 'estado' && $change->new_value === 'cerrado' && $ticket->comentario)
                         <div class="mt-1 text-white bg-gray-600 rounded">
