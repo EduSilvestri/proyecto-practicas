@@ -11,40 +11,54 @@ class TicketController extends Controller
     
     public function index(Request $request)
     {
-        if (Auth::user()->rol === 'usuario') {
-            // Usuario normal: solo puede ver sus propios tickets que estén en estado "abierto" o "en_progreso"
-            $tickets = Ticket::where('usuario_id', Auth::id())
-                             ->whereIn('estado', ['abierto', 'en_progreso'])
-                             ->paginate(10);
-            return view('tickets.user-index', compact('tickets'));
+        // Obtener el rol del usuario autenticado
+        $userRol = Auth::user()->rol;
+        $userId = Auth::id(); // ID del usuario autenticado
+    
+        // Filtrar los tickets basados en el rol del usuario
+        $tickets = Ticket::query();
+    
+        // Si el rol es "usuario", solo puede ver sus propios tickets
+        if ($userRol == 'usuario') {
+            $tickets->where('usuario_id', $userId);
         } else {
-            // Administrador o técnico: puede ver todos los tickets y filtrarlos
-            $query = Ticket::query();
-    
-            // Filtrar por asunto (por defecto)
-            if ($request->filled('q')) {
-                $q = $request->input('q');
-                $query->where('asunto', 'like', "%{$q}%");
+            // Filtrado según el rol
+            switch ($userRol) {
+                case 'it':
+                    $tickets->whereIn('tipo', ['Problemas de Pagina Web']); // Solo puede ver 'Problemas de Pagina Web'
+                    break;
+                case 'finanzas':
+                    $tickets->whereIn('tipo', ['Pagos']); // Solo puede ver 'Pagos'
+                    break;
+                case 'copyright':
+                    $tickets->whereIn('tipo', ['Peticion de Copyright', 'Peticion de Takedown']); // Solo puede ver 'Peticion de Copyright' y 'Peticion de Takedown'
+                    break;
+                case 'contenidos':
+                    $tickets->whereIn('tipo', ['Problemas de lanzamiento', 'Peticion de Actualizacion de Lanzamiento']); // Solo puede ver 'Problemas de Lanzamiento' y 'Peticion de Actualizacion de Lanzamiento'
+                    break;
+                case 'atencion':
+                    $tickets->whereIn('tipo', ['Preguntas generales']); // Solo puede ver 'Preguntas Generales'
+                    break;
+                case 'admin':
+                    // El admin puede ver todos los tickets, no hay restricciones
+                    break;
+                default:
+                    // Si el rol no coincide con ninguno de los anteriores, puede que no vean ningún ticket o todos dependiendo de lo que necesites.
+                    break;
             }
-    
-            // Filtrar por tipo
-            if ($request->filled('tipo')) {
-                $query->where('tipo', $request->input('tipo'));
-            }
-    
-            // Filtrar por estado
-            if ($request->filled('estado')) {
-                $query->where('estado', $request->input('estado'));
-            }
-
-            $tickets = $query->with('user') // Eager Loading de la relación 'user'
-                         ->paginate(10)
-                         ->appends($request->query());
-    
-            // $tickets = $query->paginate(10)->appends($request->query());
-            return view('tickets.index', compact('tickets'));
         }
+    
+        // Agregar el filtro de estado si se proporciona
+        if ($request->filled('estado')) {
+            $tickets->where('estado', $request->input('estado'));
+        }
+    
+        // Obtener los tickets según los filtros y paginarlos
+        $tickets = $tickets->with('user')->paginate(10)->appends($request->query());
+    
+        return view('tickets.index', compact('tickets'));
     }
+    
     
     
 
@@ -59,7 +73,7 @@ class TicketController extends Controller
         ]);
     
         // Asigna un estado por defecto y prioridad si es necesario
-        $data['estado'] = 'abierto';
+        $data['estado'] = 'esperando';
         $data['prioridad'] = 'media';
 
         $archivos = [];
@@ -124,11 +138,13 @@ class TicketController extends Controller
             // 'descripcion' => 'required',   
             'estado' => 'required',
             'prioridad' => 'required',
+            'tipo' => 'required',
         ]);
     
         // Actualizas sólo los campos modificables
         $ticket->estado = $validatedData['estado'];
         $ticket->prioridad = $validatedData['prioridad'];
+        $ticket->tipo = $validatedData['tipo'];
         $ticket->save();
     
         return redirect()->route('tickets.index')->with('success', 'Ticket actualizado correctamente.');

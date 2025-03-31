@@ -8,7 +8,7 @@
         <div class="bg-lujoNeg p-6 rounded-lg shadow-lg w-[80%] ">
             <h2 class="text-2xl font-bold mb-4 text-center text-white">{{ $ticket->asunto }}</h2>
 
-            @if(Auth::user()->isAdmin())
+            @if(!Auth::user()->isUser())
             <form action="{{ route('tickets.update', $ticket) }}" method="POST">
             @csrf
             @method('PUT')
@@ -19,7 +19,7 @@
                         <!-- <th class="border p-2">Descripción</th> -->
                         <th class="border p-2">Estado</th>
                         <th class="border p-2">Prioridad</th>
-                        <th class="border p-2">Tipo</th>
+                        <th class="border p-2">Derivar</th>
                         <th class="border p-2">Fecha de Creación</th>
                     </tr>
                 </thead>
@@ -40,7 +40,26 @@
                                 <option value="alta" {{ old('prioridad', $ticket->prioridad) == 'alta' ? 'selected' : '' }}>Alta</option>
                             </select>
                         </td>
-                        <td class="border p-2 text-center text-white">{{ ucfirst($ticket->tipo) }}</td>
+                        @php
+                            $tipos = [
+                            'IT' => 'Problemas de Pagina Web',
+                            'Soporte' => 'Preguntas generales',
+                            'Desarrollo' => 'Problemas de lanzamiento',
+                            'Facturación' => 'Pagos',
+                            'Actualización' => 'Peticion de Actualizacion de Lanzamiento',
+                            'Legal' => 'Peticion de Takedown',
+                            'Copyright' => 'Peticion de Copyright',
+                             ];
+                        @endphp
+
+                        <td class="border p-2 text-center">
+                           <select name="tipo" class="border rounded p-2 w-full" required>
+                            @foreach ($tipos as $name => $value)
+                               <option value="{{ $value }}" {{ old('tipo', $ticket->tipo) == $value ? 'selected' : '' }}>{{ $name }}</option>
+                            @endforeach
+                            </select>
+                        </td>
+
                         <td class="border p-2 text-center text-white">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
                     </tr>
                 </tbody>
