@@ -254,6 +254,21 @@
         function closeModal() {
             document.getElementById('imageModal').classList.add('hidden'); // Hide the modal
         }
+        document.addEventListener("DOMContentLoaded", function () {
+        let estadoSelect = document.querySelector('select[name="estado"]');
+        let comentarioContainer = document.getElementById("comentarioCierreContainer");
+        let comentarioInput = document.getElementById("comentarioCierre");
+
+        estadoSelect.addEventListener("change", function () {
+            if (this.value === "cerrado") {
+                comentarioContainer.classList.remove("hidden");
+                comentarioInput.setAttribute("required", "required");
+            } else {
+                comentarioContainer.classList.add("hidden");
+                comentarioInput.removeAttribute("required");
+            }
+        });
+    });
     </script>
 
 @endsection
