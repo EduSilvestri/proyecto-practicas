@@ -28,16 +28,16 @@ class TicketController extends Controller
                 case 'it':
                     $tickets->whereIn('tipo', ['Problemas de Pagina Web']); // Solo puede ver 'Problemas de Pagina Web'
                     break;
-                case 'finanzas':
+                case 'facturacion':
                     $tickets->whereIn('tipo', ['Pagos']); // Solo puede ver 'Pagos'
                     break;
                 case 'copyright':
                     $tickets->whereIn('tipo', ['Peticion de Copyright', 'Peticion de Takedown']); // Solo puede ver 'Peticion de Copyright' y 'Peticion de Takedown'
                     break;
-                case 'contenidos':
+                case 'desarrollo':
                     $tickets->whereIn('tipo', ['Problemas de lanzamiento', 'Peticion de Actualizacion de Lanzamiento']); // Solo puede ver 'Problemas de Lanzamiento' y 'Peticion de Actualizacion de Lanzamiento'
                     break;
-                case 'atencion':
+                case 'soporte':
                     $tickets->whereIn('tipo', ['Preguntas generales']); // Solo puede ver 'Preguntas Generales'
                     break;
                 case 'admin':

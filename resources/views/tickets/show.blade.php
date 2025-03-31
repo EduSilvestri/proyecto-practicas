@@ -45,24 +45,38 @@
                             </select>
                         </td>
                         @php
-                        $tipos = [
-                        'IT' => 'Problemas de Pagina Web',
-                        'Soporte' => 'Preguntas generales',
-                        'Desarrollo' => 'Problemas de lanzamiento',
-                        'Facturación' => 'Pagos',
-                        'Actualización' => 'Peticion de Actualizacion de Lanzamiento',
-                        'Legal' => 'Peticion de Takedown',
-                        'Copyright' => 'Peticion de Copyright',
+                        // Definir los tipos de tickets permitidos para cada rol
+                        $tiposPorRol = [
+                        'it' => ['Problemas de Pagina Web'],
+                        'facturacion' => ['Pagos'],
+                        'copyright' => ['Peticion de Copyright', 'Peticion de Takedown'],
+                        'desarrollo' => ['Problemas de lanzamiento', 'Peticion de Actualizacion de Lanzamiento'],
+                        'soporte' => ['Preguntas generales'],
+                        'admin' => [], // El admin tiene acceso a todos los tickets
+                        ];
+
+                        // Crear el array de roles con nombres amigables
+                        $roles = [
+                        'it' => 'IT',
+                        'facturacion' => 'Facturación',
+                        'copyright' => 'Copyright',
+                        'desarrollo' => 'Desarrollo',
+                        'soporte' => 'Soporte',
                         ];
                         @endphp
 
                         <td class="border p-2 text-center">
                             <select name="tipo" class="border rounded p-2 w-full" required>
-                                @foreach ($tipos as $name => $value)
-                                <option value="{{ $value }}" {{ old('tipo', $ticket->tipo) == $value ? 'selected' : '' }}>{{ $name }}</option>
+                                @foreach ($roles as $role => $name)
+                                @foreach ($tiposPorRol[$role] as $tipo)
+                                <option value="{{ $tipo }}" {{ old('tipo', $ticket->tipo) == $tipo ? 'selected' : '' }}>
+                                    {{ $name }}: {{ $tipo }}
+                                </option>
+                                @endforeach
                                 @endforeach
                             </select>
                         </td>
+
 
                         <td class="border p-2 text-center text-white">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
                     </tr>
@@ -70,7 +84,7 @@
             </table>
 
             <!-- Seccion para el historial de cambios del ticket -->
-            
+
 
             <div class="mt-8">
                 <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
@@ -203,30 +217,30 @@
 
 <div class="mt-8 bg-lujoNeg p-6 rounded-lg shadow-lg">
     @if(Auth::user()->rol !== 'usuario')
-            <div class="mt-8">
-                <h3 class="text-xl font-semibold text-white text-center">Historial de Cambios</h3>
-                <div class="bg-gray-700 p-4 rounded">
-                    @forelse ($ticket->ticketChanges as $change)
-                    <div class="mb-2">
-                        <strong class="text-lujoYel">{{ $change->user->name }}:</strong>
-                        <span class="text-white">Cambió {{ $change->change_type }} de {{ strtoupper($change->old_value) }} a {{ strtoupper($change->new_value) }}</span>
+    <div class="mt-8">
+        <h3 class="text-xl font-semibold text-white text-center">Historial de Cambios</h3>
+        <div class="bg-gray-700 p-4 rounded">
+            @forelse ($ticket->ticketChanges as $change)
+            <div class="mb-2">
+                <strong class="text-lujoYel">{{ $change->user->name }}:</strong>
+                <span class="text-white">Cambió {{ $change->change_type }} de {{ strtoupper($change->old_value) }} a {{ strtoupper($change->new_value) }}</span>
 
-                        <!-- Verificar si el cambio fue de estado y si el estado fue cerrado -->
-                        @if($change->change_type === 'estado' && $change->new_value === 'cerrado' && $ticket->comentario)
-                        <div class="mt-1 text-white bg-gray-600 rounded">
-                            <strong class="text-lujoYel">Comentario de Cierre:</strong> {{ $ticket->comentario }}
-                        </div>
-                        @endif
-                        <small class="block text-gray-400">{{ $change->created_at->diffForHumans() }}</small>
-
-                    </div>
-                    @empty
-                    <p class="text-white">No hay cambios registrados para este ticket.</p>
-                    @endforelse
+                <!-- Verificar si el cambio fue de estado y si el estado fue cerrado -->
+                @if($change->change_type === 'estado' && $change->new_value === 'cerrado' && $ticket->comentario)
+                <div class="mt-1 text-white bg-gray-600 rounded">
+                    <strong class="text-lujoYel">Comentario de Cierre:</strong> {{ $ticket->comentario }}
                 </div>
+                @endif
+                <small class="block text-gray-400">{{ $change->created_at->diffForHumans() }}</small>
+
             </div>
-            @endif
+            @empty
+            <p class="text-white">No hay cambios registrados para este ticket.</p>
+            @endforelse
         </div>
+    </div>
+    @endif
+</div>
 
 
 
