@@ -9,12 +9,12 @@
         <p class="text-green-500">{{ session('exito') }}</p>
     @endif
 
+    @if(Auth::user()->isUser())
     <table class="w-full mt-4 border-collapse border">
         <thead>
             <tr class="bg-lujoNeg text-white">
                 <th class="border p-2">Asunto</th>
                 <th class="border p-2">Estado</th>
-                <th class="border p-2">Prioridad</th>
                 <th class="border p-2">Tipo</th>
                 <th class="border p-2">Fecha de Creación</th>
                 <th class="border p-2">Acciones</th>
@@ -25,7 +25,6 @@
                 <tr class="border">
                     <td class="border p-2 text-center">{{ $ticket->asunto }}</td>
                     <td class="border p-2 text-center">{{ ucfirst($ticket->estado) }}</td>
-                    <td class="border p-2 text-center">{{ ucfirst($ticket->prioridad) }}</td>
                     <td class="border p-2 text-center">{{ ucfirst($ticket->tipo) }}</td>
                     <td class="border p-2 text-center">{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
                     <td class="border p-2 text-center">
@@ -35,6 +34,8 @@
             @endforeach
         </tbody>
     </table>
+    @endif
+
 @endsection
 
 

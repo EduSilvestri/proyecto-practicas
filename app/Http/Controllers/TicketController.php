@@ -56,7 +56,10 @@ class TicketController extends Controller
     
         // Obtener los tickets según los filtros y paginarlos
         $tickets = $tickets->with('user')->paginate(10)->appends($request->query());
-    
+
+        if ($userRol == 'usuario') {
+        return view('tickets.user-index', compact('tickets')); 
+        }
         return view('tickets.index', compact('tickets'));
     }
     
