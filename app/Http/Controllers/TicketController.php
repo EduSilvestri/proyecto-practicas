@@ -139,12 +139,18 @@ class TicketController extends Controller
             'estado' => 'required',
             'prioridad' => 'required',
             'tipo' => 'required',
+            'comentario' => $request->estado === 'cerrado' ? 'required|string' : 'nullable',
         ]);
     
         // Actualizas sólo los campos modificables
         $ticket->estado = $validatedData['estado'];
         $ticket->prioridad = $validatedData['prioridad'];
         $ticket->tipo = $validatedData['tipo'];
+        
+        if ($request->estado === 'cerrado') {
+            $ticket->comentario = $validatedData['comentario'];
+        }
+    
         $ticket->save();
     
         return redirect()->route('tickets.index')->with('success', 'Ticket actualizado correctamente.');

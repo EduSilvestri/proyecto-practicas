@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('estado', ['esperando', 'abierto', 'en_progreso', 'cerrado'])->default('esperando');
             $table->enum('prioridad', ['baja', 'media', 'alta'])->default('media');
             $table->json('archivos')->nullable();
+            $table->text('comentario')->nullable();
             $table->timestamps();
     
             // Define la clave foránea

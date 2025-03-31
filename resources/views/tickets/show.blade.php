@@ -32,6 +32,10 @@
                             <option value="en_progreso" {{ old('estado', $ticket->estado) == 'en_progreso' ? 'selected' : '' }}>En Progreso</option>
                             <option value="cerrado" {{ old('estado', $ticket->estado) == 'cerrado' ? 'selected' : '' }}>Cerrado</option>
                         </select>
+                        <div id="comentarioCierreContainer" class="hidden mt-4">
+                            <label for="comentarioCierre" class="text-white">Comentario de Cierre (Obligatorio)</label>
+                            <textarea id="comentarioCierre" name="comentario" class="border rounded p-2 w-full" placeholder="Ingrese un comentario de cierre"></textarea>
+                        </div>
                         </td>
                         <td class="border p-2 text-center">
                             <select name="prioridad" class="border rounded p-2 w-full" required>
@@ -232,6 +236,21 @@
         function closeModal() {
             document.getElementById('imageModal').classList.add('hidden'); // Hide the modal
         }
+        document.addEventListener("DOMContentLoaded", function () {
+        let estadoSelect = document.querySelector('select[name="estado"]');
+        let comentarioContainer = document.getElementById("comentarioCierreContainer");
+        let comentarioInput = document.getElementById("comentarioCierre");
+
+        estadoSelect.addEventListener("change", function () {
+            if (this.value === "cerrado") {
+                comentarioContainer.classList.remove("hidden");
+                comentarioInput.setAttribute("required", "required");
+            } else {
+                comentarioContainer.classList.add("hidden");
+                comentarioInput.removeAttribute("required");
+            }
+        });
+    });
     </script>
 
 @endsection
