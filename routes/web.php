@@ -1,12 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\MessageController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/logout', function () {
+    Auth::logout(); // Logout del usuario
+    return redirect()->route('login'); // Redirige al login después de hacer logout
+})->name('logout');
 
 Route::get('/home', function () {
     return view('home');

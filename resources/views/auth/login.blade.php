@@ -44,5 +44,13 @@
                 </x-button>
             </div>
         </form>
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-600">
+                ¿No tienes una cuenta? 
+                <a href="{{ route('register') }}" class="underline text-sm text-blue-600 hover:text-blue-800">
+                    {{ __('Regístrate aquí') }}
+                </a>
+            </p>
+        </div>
     </x-authentication-card>
 </x-guest-layout>
