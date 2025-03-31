@@ -32,6 +32,10 @@
                                 <option value="en_progreso" {{ old('estado', $ticket->estado) == 'en_progreso' ? 'selected' : '' }}>En Progreso</option>
                                 <option value="cerrado" {{ old('estado', $ticket->estado) == 'cerrado' ? 'selected' : '' }}>Cerrado</option>
                             </select>
+                        <div id="comentarioCierreContainer" class="hidden mt-4">
+                            <label for="comentarioCierre" class="text-white">Comentario de Cierre (Obligatorio)</label>
+                            <textarea id="comentarioCierre" name="comentario" class="border rounded p-2 w-full" placeholder="Ingrese un comentario de cierre"></textarea>
+                        </div>
                         </td>
                         <td class="border p-2 text-center">
                             <select name="prioridad" class="border rounded p-2 w-full" required>
@@ -246,10 +250,10 @@
         document.getElementById('imageModal').classList.remove('hidden'); // Show the modal
     }
 
-    // Función para cerrar el modal
-    function closeModal() {
-        document.getElementById('imageModal').classList.add('hidden'); // Hide the modal
-    }
-</script>
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById('imageModal').classList.add('hidden'); // Hide the modal
+        }
+    </script>
 
 @endsection

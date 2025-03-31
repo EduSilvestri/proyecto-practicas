@@ -33,6 +33,11 @@
                     </select>
                 </div>
 
+                <div id="comentarioDiv" style="margin-bottom: 16px; display: none;">
+                    <label style="display: block; color: white;">Comentario</label>
+                    <textarea name="comentario" id="comentario" style="border: 1px solid #ccc; border-radius: 4px; padding: 8px; width: 100%;" placeholder="Escribe un comentario..." rows="3"></textarea>
+                </div>
+
                 <div style="margin-bottom: 16px;">
                     <label style="display: block; color: white;">Prioridad</label>
                     <select name="prioridad" style="border: 1px solid #ccc; border-radius: 4px; padding: 8px; width: 100%;" required>
@@ -56,6 +61,26 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function mostrarComentario() {
+            let estado = document.getElementById("estado").value;
+            let comentarioDiv = document.getElementById("comentarioDiv");
+            comentarioDiv.style.display = estado === "cerrado" ? "block" : "none";
+        }
+
+        function validarFormulario() {
+            let estado = document.getElementById("estado").value;
+            let comentario = document.getElementById("comentario").value.trim();
+            if (estado === "cerrado" && comentario === "") {
+                alert("Debes ingresar un comentario antes de cerrar el ticket.");
+                return false;
+            }
+            return true;
+        }
+
+        window.onload = mostrarComentario;
+    </script>
 @endsection
 
 

@@ -16,7 +16,8 @@ class Ticket extends Model
         'descripcion',
         'estado',
         'prioridad',
-        'archivos'
+        'archivos',
+        'comentario'
     ];
 
     // Relación con el usuario que creó el ticket
