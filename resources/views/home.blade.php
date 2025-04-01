@@ -53,8 +53,8 @@
     .show {
       display: block !important;
     }
-        /* Estilo para el logo y texto centrados */
-        .center-content {
+    /* Estilo para el logo y texto centrados */
+    .center-content {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -91,11 +91,13 @@
 
       <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" value="{{ auth()->check() ? auth()->user()->name : '' }}" readonly required>
+        <input type="text" class="form-control" id="nombre" name="nombre" 
+               value="{{ auth()->check() ? auth()->user()->name : '' }}" readonly required>
       </div>
       <div class="mb-3">
         <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Tu email" value="{{ auth()->check() ? auth()->user()->email : '' }}" readonly required>
+        <input type="email" class="form-control" id="email" name="email" 
+               value="{{ auth()->check() ? auth()->user()->email : '' }}" readonly required>
       </div>
       <div class="mb-3">
         <label for="asunto" class="form-label">Asunto</label>
@@ -116,18 +118,22 @@
       </div>
       <div class="mb-3">
         <label for="descripcion" class="form-label">Descripción</label>
-        <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Describe tu problema" rows="4" required></textarea>
+        <textarea class="form-control" id="descripcion" name="descripcion" 
+                  placeholder="Describe tu problema" rows="4" required></textarea>
       </div>
       <div class="mb-3">
-        <button type="button" class="btn btn-secondary boton" id="screenshotBtn">Hacer captura de pantalla</button>
+        <button type="button" class="btn btn-secondary boton" id="screenshotBtn">
+          Hacer captura de pantalla
+        </button>
         <!-- Vista previa de la captura -->
         <div id="screenshotPreview" class="mt-2"></div>
         <!-- Campo oculto para guardar la captura en base64 -->
         <input type="hidden" name="screenshot" id="screenshot">
       </div>
       <div class="mb-3">
-        <label for="archivos" class="form-label">Subir archivos (máximo 5)</label>
-        <input type="file" class="form-control" id="archivos" name="archivos[]" multiple accept="image/*,application/pdf">
+        <label for="archivos" class="form-label">Subir imagenes (máximo 5)</label>
+        <input type="file" class="form-control" id="archivos" name="archivos[]" 
+               multiple accept="image/*">
         <small class="form-text text-muted">Puedes subir hasta 5 archivos.</small>
       </div>
       <button type="submit" class="btn btn-primary boton">Enviar ticket</button>
@@ -137,25 +143,35 @@
   <!-- Se incluye la librería html2canvas para la funcionalidad de captura de pantalla -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
+    // Mostrar/ocultar el formulario al pulsar "¿Necesitas ayuda?"
     document.getElementById('toggleForm').addEventListener('click', function() {
       var form = document.getElementById('floatingForm');
       form.classList.toggle('show');
     });
 
+    // Al hacer clic en "Hacer captura de pantalla"
     document.getElementById('screenshotBtn').addEventListener('click', function() {
-      html2canvas(document.documentElement).then(function(canvas) {
+      html2canvas(document.body, {
+        ignoreElements: function(element) {
+          return element.id === "floatingForm";
+        }
+      }).then(function(canvas) {
         var preview = document.getElementById('screenshotPreview');
         preview.innerHTML = "";
-        canvas.style.maxWidth = "100%";
+        canvas.style.width = "300px"; 
+        canvas.style.height = "auto"; 
         preview.appendChild(canvas);
-        // Almacena la imagen en formato base64 en el campo oculto
+        // Guardar la imagen en base64 en el campo oculto
         document.getElementById('screenshot').value = canvas.toDataURL('image/png');
+      }).catch(function(error) {
+        console.error("Error al capturar la pantalla:", error);
       });
     });
 
+    // Validación para limitar el número de archivos a 5
     document.getElementById('archivos').addEventListener('change', function() {
       if (this.files.length > 5) {
-        alert("Solo puedes subir un máximo de 5 archivos.");
+        alert("Solo puedes subir un máximo de 5 imagenes.");
         this.value = "";
       }
     });
