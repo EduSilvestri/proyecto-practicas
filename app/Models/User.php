@@ -30,11 +30,17 @@ class User extends Authenticatable
         'email',
         'password',
         'rol',
+        'clase'
     ];
 
     public function isAdmin(): bool
 {
     return $this->rol === 'admin';
+}
+
+    public function isJefe(): bool
+{
+    return $this->clase === 'jefe';
 }
 
 public function isUser(): bool
