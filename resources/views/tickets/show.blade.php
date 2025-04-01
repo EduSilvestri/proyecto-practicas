@@ -85,34 +85,6 @@
 
             <!-- Seccion para el historial de cambios del ticket -->
 
-        @if(Auth::user()->clase == 'jefe')
-
-            @php
-                // Obtener el rol del usuario actual
-                $rolActual = Auth::user()->rol;
-
-                // Buscar en la base de datos todos los usuarios con ese mismo rol
-                $usuariosMismoRol = \App\Models\User::where('rol', $rolActual)->where('clase', 'empleado')->get();
-            @endphp
-            <form action="{{ route('tickets.asignEnc', $ticket) }}" method="POST">
-            @csrf
-            @method('PUT')
-                <div class="mt-4">
-                    <label for="acciones" class="text-white block mb-2">Asignar encargado:</label>
-                        <select name="encargado_id" id="acciones" class="border rounded p-2 w-full">
-                        @foreach ($usuariosMismoRol as $usuario)
-                            <option value="{{ $usuario->id }}" {{ old('encargado_id') == $usuario->id ? 'selected' : '' }}>
-                                {{ $usuario->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="submit" class="inline-block px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
-                    Asignar
-                </button>
-            </form>
-        @endif
-
 
             <div class="mt-8">
                 <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
@@ -156,6 +128,35 @@
                 </button>
             </div>
         </form>
+
+        @if(Auth::user()->clase == 'jefe')
+
+            @php
+                // Obtener el rol del usuario actual
+                $rolActual = Auth::user()->rol;
+
+                // Buscar en la base de datos todos los usuarios con ese mismo rol
+                $usuariosMismoRol = \App\Models\User::where('rol', $rolActual)->where('clase', 'empleado')->get();
+            @endphp
+            <form action="{{ route('tickets.asignEnc', $ticket) }}" method="POST">
+            @csrf
+            @method('PUT')
+                <div class="mt-4">
+                    <label for="acciones" class="text-white block mb-2">Asignar encargado:</label>
+                        <select name="encargado_id" id="acciones" class="border rounded p-2 w-full">
+                        @foreach ($usuariosMismoRol as $usuario)
+                        <option value="{{ $usuario->id }}" {{ old('encargado_id', $ticket->encargado_id) == $usuario->id ? 'selected' : '' }}>
+                                {{ $usuario->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="inline-block px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
+                    Asignar
+                </button>
+            </form>
+        @endif
+
         @else
         @csrf
         @method('PUT')

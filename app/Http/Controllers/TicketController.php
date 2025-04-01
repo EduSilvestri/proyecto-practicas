@@ -142,14 +142,17 @@ class TicketController extends Controller
 
     public function asignEnc(Request $request, Ticket $ticket)
     {
-        $request->validate([
-            'encargado_id' => 'required|exists:users,id',
+        $validatedData = $request->validate([
+            'encargado_id' => 'required',
         ]);
     
-        $ticket->encargado_id = $request->encargado_id;
+        if ($ticket->encargado_id !== $validatedData['encargado_id']) {
+            $this->registerTicketChange($ticket, 'encargado_id', $ticket->encargado_id, $validatedData['encargado_id']);
+        }
+
         $ticket->save();
     
-        return redirect()->back()->with('success', 'Encargado asignado correctamente.');
+        return redirect()->route('tickets.index')->with('éxito', 'Encargado asignado correctamente.');
     }
     
 
