@@ -85,6 +85,28 @@
 
             <!-- Seccion para el historial de cambios del ticket -->
 
+        @if(Auth::user()->clase == 'jefe')
+
+            @php
+                // Obtener el rol del usuario actual
+                $rolActual = Auth::user()->rol;
+
+                // Buscar en la base de datos todos los usuarios con ese mismo rol
+                $usuariosMismoRol = \App\Models\User::where('rol', $rolActual)->where('clase', 'empleado')->get();
+            @endphp
+
+            <div class="mt-4">
+                <label for="acciones" class="text-white block mb-2">Asignar encargado:</label>
+                    <select name="acciones" id="acciones" class="border rounded p-2 w-full">
+                    @foreach ($usuariosMismoRol as $usuario)
+                        <option value="{{ $usuario->id }}" {{ old('usuario_id') == $usuario->id ? 'selected' : '' }}>
+                            {{ $usuario->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
+
 
             <div class="mt-8">
                 <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>

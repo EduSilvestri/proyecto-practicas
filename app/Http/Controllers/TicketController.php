@@ -14,6 +14,7 @@ class TicketController extends Controller
     {
         // Obtener el rol del usuario autenticado
         $userRol = Auth::user()->rol;
+        $userClase = Auth::user()->clase;
         $userId = Auth::id(); // ID del usuario autenticado
     
         // Filtrar los tickets basados en el rol del usuario
@@ -48,24 +49,11 @@ class TicketController extends Controller
                     break;
             }
         } else if ($userClase == 'empleado'){
-            switch ($userRol) {
-                case 'it':
-                    $tickets->whereIn('tipo', ['Problemas de Pagina Web']); // Solo puede ver 'Problemas de Pagina Web'
-                    break;
-                case 'facturacion':
-                    $tickets->whereIn('tipo', ['Pagos']); // Solo puede ver 'Pagos'
-                    break;
-                case 'copyright':
-                    $tickets->whereIn('tipo', ['Peticion de Copyright', 'Peticion de Takedown']); // Solo puede ver 'Peticion de Copyright' y 'Peticion de Takedown'
-                    break;
-                case 'desarrollo':
-                    $tickets->whereIn('tipo', ['Problemas de lanzamiento', 'Peticion de Actualizacion de Lanzamiento']); // Solo puede ver 'Problemas de Lanzamiento' y 'Peticion de Actualizacion de Lanzamiento'
-                    break;
-                case 'soporte':
-                    $tickets->whereIn('tipo', ['Preguntas generales']); // Solo puede ver 'Preguntas Generales'
-                    break;
-            }
+            
+            $tickets->where('encargado_id', $userId);
+                
         }
+        
     
         // Agregar el filtro de estado si se proporciona
         if ($request->filled('estado')) {
