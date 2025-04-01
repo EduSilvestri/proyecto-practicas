@@ -140,6 +140,18 @@ class TicketController extends Controller
         return view('tickets.edit', compact('ticket'));
     }
 
+    public function asignEnc(Request $request, Ticket $ticket)
+    {
+        $validatedData = $request->validate([
+            'encargado_id' => 'required'
+        ]);
+
+            $this->registerTicketChange($ticket, 'encargado_id', $ticket->encargado_id, $validatedData['encargado_id']);
+    
+        $ticket->save();
+    
+        return redirect()->route('tickets.index')->with('success', 'Ticket actualizado correctamente.');
+    }
     
     public function update(Request $request, Ticket $ticket)
     {

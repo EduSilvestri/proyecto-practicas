@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('prioridad', ['baja', 'media', 'alta'])->default('media');
             $table->json('archivos')->nullable();
             $table->text('comentario')->nullable();
-            $table->unsignedBigInteger('encargado_id')->nullable;
+            $table->unsignedBigInteger('encargado_id')->nullable();
             $table->timestamps();
     
             // Define la clave foránea

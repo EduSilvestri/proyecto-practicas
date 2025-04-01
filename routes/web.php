@@ -36,3 +36,5 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
 
 Route::post('tickets/{ticket}/message', [MessageController::class, 'store'])->name('tickets.message.store');
+
+Route::post('/tickets/{ticket}/asignar', [TicketController::class, 'asignEnc'])->name('tickets.asignEnc');
