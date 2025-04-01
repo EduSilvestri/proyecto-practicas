@@ -152,6 +152,8 @@ class TicketController extends Controller
             $this->registerTicketChange($ticket, 'encargado_id', $ticket->encargado_id, $validatedData['encargado_id']);
         }
 
+        $ticket->encargado_id = $validatedData['encargado_id'];
+
         $ticket->save();
     
         return redirect()->route('tickets.index')->with('éxito', 'Encargado asignado correctamente.');
