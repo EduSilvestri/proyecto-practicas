@@ -96,11 +96,12 @@
             @endphp
             <form action="{{ route('tickets.asignEnc', $ticket) }}" method="POST">
             @csrf
+            @method('PUT')
                 <div class="mt-4">
                     <label for="acciones" class="text-white block mb-2">Asignar encargado:</label>
-                        <select name="acciones" id="acciones" class="border rounded p-2 w-full">
+                        <select name="encargado_id" id="acciones" class="border rounded p-2 w-full">
                         @foreach ($usuariosMismoRol as $usuario)
-                            <option value="{{ $usuario->id }}" {{ old('usuario_id') == $usuario->id ? 'selected' : '' }}>
+                            <option value="{{ $usuario->id }}" {{ old('encargado_id') == $usuario->id ? 'selected' : '' }}>
                                 {{ $usuario->name }}
                             </option>
                         @endforeach
