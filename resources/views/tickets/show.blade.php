@@ -129,6 +129,8 @@
             </div>
         </form>
 
+
+        <!-- Asignar encargado -->
         @if(Auth::user()->clase == 'jefe')
 
             @php

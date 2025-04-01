@@ -140,6 +140,8 @@ class TicketController extends Controller
         return view('tickets.edit', compact('ticket'));
     }
 
+
+    //función para asignar encargado
     public function asignEnc(Request $request, Ticket $ticket)
     {
         $validatedData = $request->validate([
