@@ -22,7 +22,7 @@ class TicketController extends Controller
         // Si el rol es "usuario", solo puede ver sus propios tickets
         if ($userRol == 'usuario') {
             $tickets->where('usuario_id', $userId);
-        } else {
+        } else if ($userClase == 'jefe' || $userRol == 'admin'){
             // Filtrado según el rol
             switch ($userRol) {
                 case 'it':
@@ -45,6 +45,24 @@ class TicketController extends Controller
                     break;
                 default:
                     // Si el rol no coincide con ninguno de los anteriores, puede que no vean ningún ticket o todos dependiendo de lo que necesites.
+                    break;
+            }
+        } else if ($userClase == 'empleado'){
+            switch ($userRol) {
+                case 'it':
+                    $tickets->whereIn('tipo', ['Problemas de Pagina Web']); // Solo puede ver 'Problemas de Pagina Web'
+                    break;
+                case 'facturacion':
+                    $tickets->whereIn('tipo', ['Pagos']); // Solo puede ver 'Pagos'
+                    break;
+                case 'copyright':
+                    $tickets->whereIn('tipo', ['Peticion de Copyright', 'Peticion de Takedown']); // Solo puede ver 'Peticion de Copyright' y 'Peticion de Takedown'
+                    break;
+                case 'desarrollo':
+                    $tickets->whereIn('tipo', ['Problemas de lanzamiento', 'Peticion de Actualizacion de Lanzamiento']); // Solo puede ver 'Problemas de Lanzamiento' y 'Peticion de Actualizacion de Lanzamiento'
+                    break;
+                case 'soporte':
+                    $tickets->whereIn('tipo', ['Preguntas generales']); // Solo puede ver 'Preguntas Generales'
                     break;
             }
         }
