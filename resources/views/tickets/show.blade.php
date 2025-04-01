@@ -143,9 +143,9 @@
             <form action="{{ route('tickets.asignEnc', $ticket) }}" method="POST">
             @csrf
             @method('PUT')
-                <div class="mt-4">
+                <div class="mt-6 text-center">
                     <label for="acciones" class="text-white block mb-2">Asignar encargado:</label>
-                        <select name="encargado_id" id="acciones" class="border rounded p-2 w-full">
+                        <select name="encargado_id" id="encargado_id" class="border rounded p-2 w-full">
                         @foreach ($usuariosMismoRol as $usuario)
                         <option value="{{ $usuario->id }}" {{ old('encargado_id', $ticket->encargado_id) == $usuario->id ? 'selected' : '' }}>
                                 {{ $usuario->name }}
@@ -153,9 +153,11 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="mt-6 text-center">
                 <button type="submit" class="inline-block px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
                     Asignar
                 </button>
+                </div>
             </form>
         @endif
 
