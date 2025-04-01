@@ -75,7 +75,7 @@
 <body>
 
   <div class="center-content">
-    <img src="{{ asset('img/logo_negro.png') }}" alt="Logo"> <!-- Reemplaza con la ruta de tu logo -->
+    <img src="{{ asset('img/logo_negro.png') }}" alt="Logo">
     <h1>Bienvenido a Lujo Network</h1>
   </div>
 
@@ -86,7 +86,6 @@
   <div class="form-container" id="floatingForm">
     <form method="POST" action="{{ route('tickets.store') }}" enctype="multipart/form-data">
       @csrf
-      <!-- Campo oculto para enviar el usuario autenticado -->
       <input type="hidden" name="usuario_id" value="{{ auth()->check() ? auth()->user()->id : '' }}">
 
       <div class="mb-3">
@@ -125,22 +124,19 @@
         <button type="button" class="btn btn-secondary boton" id="screenshotBtn">
           Hacer captura de pantalla
         </button>
-        <!-- Vista previa de la captura -->
         <div id="screenshotPreview" class="mt-2"></div>
-        <!-- Campo oculto para guardar la captura en base64 -->
         <input type="hidden" name="screenshot" id="screenshot">
       </div>
       <div class="mb-3">
-        <label for="archivos" class="form-label">Subir imagenes (máximo 5)</label>
-        <input type="file" class="form-control" id="archivos" name="archivos[]" 
-               multiple accept="image/*">
-        <small class="form-text text-muted">Puedes subir hasta 5 archivos.</small>
+        <label for="archivos" class="form-label">Subir imágenes (máximo 5)</label>
+        <!-- Se acepta solo imágenes -->
+        <input type="file" class="form-control" id="archivos" name="archivos[]" multiple accept="image/*">
+        <small class="form-text text-muted">Puedes subir hasta 5 imágenes. Resolución máxima permitida: 1920x1080.</small>
       </div>
       <button type="submit" class="btn btn-primary boton">Enviar ticket</button>
     </form>
   </div>
 
-  <!-- Se incluye la librería html2canvas para la funcionalidad de captura de pantalla -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     // Mostrar/ocultar el formulario al pulsar "¿Necesitas ayuda?"
@@ -149,7 +145,7 @@
       form.classList.toggle('show');
     });
 
-    // Al hacer clic en "Hacer captura de pantalla"
+    // Captura de pantalla ignorando el formulario
     document.getElementById('screenshotBtn').addEventListener('click', function() {
       html2canvas(document.body, {
         ignoreElements: function(element) {
@@ -158,24 +154,53 @@
       }).then(function(canvas) {
         var preview = document.getElementById('screenshotPreview');
         preview.innerHTML = "";
-        canvas.style.width = "300px"; 
-        canvas.style.height = "auto"; 
+        canvas.style.width = "300px";
+        canvas.style.height = "auto";
         preview.appendChild(canvas);
-        // Guardar la imagen en base64 en el campo oculto
         document.getElementById('screenshot').value = canvas.toDataURL('image/png');
       }).catch(function(error) {
         console.error("Error al capturar la pantalla:", error);
       });
     });
 
-    // Validación para limitar el número de archivos a 5
+    // Validación para imágenes: máximo 5 archivos y resolución máxima 1920x1080
     document.getElementById('archivos').addEventListener('change', function() {
-      if (this.files.length > 5) {
-        alert("Solo puedes subir un máximo de 5 imagenes.");
+      var files = this.files;
+      if (files.length > 5) {
+        alert("Solo puedes subir un máximo de 5 imágenes.");
         this.value = "";
+        return;
       }
+
+      const maxWidth = 1920;
+      const maxHeight = 1080;
+      let promises = [];
+      
+      // Comprobar la resolución de cada imagen usando let para evitar problemas de closure
+      for (let i = 0; i < files.length; i++) {
+        promises.push(new Promise((resolve, reject) => {
+          let img = new Image();
+          img.onload = function() {
+            if (img.width > maxWidth || img.height > maxHeight) {
+              reject(`La imagen "${files[i].name}" excede la resolución máxima permitida (${maxWidth}x${maxHeight}).`);
+            } else {
+              resolve();
+            }
+          };
+          img.onerror = function() {
+            reject(`No se pudo verificar la imagen "${files[i].name}".`);
+          };
+          img.src = URL.createObjectURL(files[i]);
+        }));
+      }
+
+      Promise.all(promises).catch(error => {
+        alert(error);
+        document.getElementById('archivos').value = "";
+      });
     });
   </script>
 </body>
 </html>
 @endsection
+
