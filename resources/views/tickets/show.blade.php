@@ -134,7 +134,7 @@
         @if(Auth::user()->clase == 'jefe')
 
             @php
-                // Obtener el rol del usuario actual
+                // Obtener el rol del usuario actual 
                 $rolActual = Auth::user()->rol;
 
                 // Buscar en la base de datos todos los usuarios con ese mismo rol

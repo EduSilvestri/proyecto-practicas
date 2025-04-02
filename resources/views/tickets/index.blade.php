@@ -61,7 +61,7 @@
                             <button type="submit" class="px-4 py-2 rounded-r-none">Cerrados</button>
                         </form>
                     </th>
-                    <th colspan="3"></th> <!-- Deja espacio vacío en las otras columnas de la tabla -->
+                    <th colspan="4"></th> <!-- Deja espacio vacío en las otras columnas de la tabla -->
                 </tr>
             <tr class="bg-lujoNeg text-white">
                 <th class="border p-2">Usuario</th> 
@@ -69,6 +69,10 @@
                 <th class="border p-2">Estado</th>
                 <th class="border p-2">Prioridad</th>
                 <th class="border p-2">Tipo</th>
+                <!-- Columna para mostrar el nombre del empleado derivado solo si el usuario es jefe -->
+            @if(Auth::user()->clase == 'jefe' || Auth::user()->rol == 'admin')
+                <th class="border p-2">Encargado</th>
+            @endif
                 <th class="border p-2">Fecha de Creación</th>
                 <th class="border p-2">Acciones</th>
             </tr>
@@ -81,6 +85,16 @@
                     <td class="border p-2 text-center">{{ ucfirst($ticket->estado) }}</td>
                     <td class="border p-2 text-center">{{ ucfirst($ticket->prioridad) }}</td>
                     <td class="border p-2 text-center">{{ ucfirst($ticket->tipo) }}</td>
+                   <!-- Mostrar el nombre del empleado derivado solo si el usuario es jefe -->
+                @if(Auth::user()->clase == 'jefe' || Auth::user()->rol == 'admin')
+                    <td class="border p-2 text-center">
+                        @if($ticket->encargado)
+                            {{ $ticket->encargado->name }}
+                        @else
+                            No asignado
+                        @endif
+                    </td>
+                @endif
                     <td class="border p-2 text-center">{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
                     <td class="border p-2 text-center">
                         <a href="{{ route('tickets.show', $ticket) }}" class="text-blue-500">Ver</a>

@@ -61,7 +61,7 @@ class TicketController extends Controller
         }
     
         // Obtener los tickets según los filtros y paginarlos
-        $tickets = $tickets->with('user')->paginate(10)->appends($request->query());
+        $tickets = $tickets->with('user', 'encargado')->paginate(10)->appends($request->query());
 
         if ($userRol == 'usuario') {
         return view('tickets.user-index', compact('tickets')); 
@@ -130,6 +130,13 @@ class TicketController extends Controller
     
     public function show(Ticket $ticket)
     {
+         // Verificar si el ticket está en "esperando" y cambiarlo a "abierto" si el empleado lo ve
+         if ($ticket->estado == 'esperando' && Auth::user()->clase == 'empleado') {
+            $this->registerTicketChange($ticket, 'estado', 'esperando', 'abierto');
+            $ticket->estado = 'abierto';
+            $ticket->save();
+        }
+
         return view('tickets.show', compact('ticket'));
         
     }
@@ -148,8 +155,12 @@ class TicketController extends Controller
             'encargado_id' => 'required',
         ]);
     
+        $oldEncargado = $ticket->encargado_id ? \App\Models\User::find($ticket->encargado_id)->name : 'Encargado'; 
+        $newEncargado = \App\Models\User::find($validatedData['encargado_id'])->name;
+        
         if ($ticket->encargado_id !== $validatedData['encargado_id']) {
-            $this->registerTicketChange($ticket, 'encargado_id', $ticket->encargado_id, $validatedData['encargado_id']);
+            // Registrar el cambio de encargado con nombres
+            $this->registerTicketChange($ticket, 'encargado_id', $oldEncargado, $newEncargado);
         }
 
         $ticket->encargado_id = $validatedData['encargado_id'];
