@@ -1,12 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\MessageController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/logout', function () {
+    Auth::logout(); // Logout del usuario
+    return redirect()->route('login'); // Redirige al login después de hacer logout
+})->name('logout');
 
 Route::get('/home', function () {
     return view('home');
@@ -30,3 +36,5 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
 
 Route::post('tickets/{ticket}/message', [MessageController::class, 'store'])->name('tickets.message.store');
+
+Route::put('/tickets/{ticket}/asignar', [TicketController::class, 'asignEnc'])->name('tickets.asignEnc');

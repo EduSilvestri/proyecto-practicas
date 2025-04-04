@@ -17,7 +17,8 @@ class Ticket extends Model
         'estado',
         'prioridad',
         'archivos',
-        'comentario'
+        'comentario',
+        'encargado_id'
     ];
 
     // Relación con el usuario que creó el ticket
@@ -26,9 +27,19 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'usuario_id');
     }
 
+    public function encargado()
+    {
+        return $this->belongsTo(User::class, 'encargado_id');
+    }
+
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function ticketChanges()
+    {
+        return $this->hasMany(TicketChange::class);
     }
 
     

@@ -5,7 +5,7 @@
 @section('content')
 <!-- Contenedor para centrar el contenido -->
 <div class="flex justify-center items-center min-h-screen bg-lujoYel-100">
-    <div class="bg-lujoNeg p-6 rounded-lg shadow-lg w-[80%] ">
+    <div class="bg-lujoNeg p-6 rounded-lg shadow-lg w-[80%]">
         <h2 class="text-2xl font-bold mb-4 text-center text-white">{{ $ticket->asunto }}</h2>
 
         @if(!Auth::user()->isUser())
@@ -27,15 +27,15 @@
                     <tr class="border">
                         <!-- <td class="border p-2">{{ $ticket->descripcion }}</td> -->
                         <td class="border p-2 text-center text-black">
-                        <select name="estado" class="border rounded p-2 w-full" required>
-                            <option value="abierto" {{ old('estado', $ticket->estado) == 'abierto' ? 'selected' : '' }}>Abierto</option>
-                            <option value="en_progreso" {{ old('estado', $ticket->estado) == 'en_progreso' ? 'selected' : '' }}>En Progreso</option>
-                            <option value="cerrado" {{ old('estado', $ticket->estado) == 'cerrado' ? 'selected' : '' }}>Cerrado</option>
-                        </select>
-                        <div id="comentarioCierreContainer" class="hidden mt-4">
-                            <label for="comentarioCierre" class="text-white">Comentario de Cierre (Obligatorio)</label>
-                            <textarea id="comentarioCierre" name="comentario" class="border rounded p-2 w-full" placeholder="Ingrese un comentario de cierre"></textarea>
-                        </div>
+                            <select name="estado" class="border rounded p-2 w-full" required>
+                                <option value="abierto" {{ old('estado', $ticket->estado) == 'abierto' ? 'selected' : '' }}>Abierto</option>
+                                <option value="en_progreso" {{ old('estado', $ticket->estado) == 'en_progreso' ? 'selected' : '' }}>En Progreso</option>
+                                <option value="cerrado" {{ old('estado', $ticket->estado) == 'cerrado' ? 'selected' : '' }}>Cerrado</option>
+                            </select>
+                            <div id="comentarioCierreContainer" class="hidden mt-4">
+                                <label for="comentarioCierre" class="text-white">Comentario de Cierre (Obligatorio)</label>
+                                <textarea id="comentarioCierre" name="comentario" class="border rounded p-2 w-full" placeholder="Ingrese un comentario de cierre"></textarea>
+                            </div>
                         </td>
                         <td class="border p-2 text-center">
                             <select name="prioridad" class="border rounded p-2 w-full" required>
@@ -45,47 +45,30 @@
                             </select>
                         </td>
                         @php
-                        $tipos = [
-                        'IT' => 'Problemas de Pagina Web',
-                        'Soporte' => 'Preguntas generales',
-                        'Desarrollo' => 'Problemas de lanzamiento',
-                        'Facturación' => 'Pagos',
-                        'Actualización' => 'Peticion de Actualizacion de Lanzamiento',
-                        'Legal' => 'Peticion de Takedown',
-                        'Copyright' => 'Peticion de Copyright',
-                        ];
+                            $tipos = [
+                            'IT' => 'Problemas de Pagina Web',
+                            'Soporte' => 'Preguntas generales',
+                            'Desarrollo' => 'Problemas de lanzamiento',
+                            'Facturación' => 'Pagos',
+                            'Actualización' => 'Peticion de Actualizacion de Lanzamiento',
+                            'Legal' => 'Peticion de Takedown',
+                            'Copyright' => 'Peticion de Copyright',
+                             ];
                         @endphp
 
                         <td class="border p-2 text-center">
-                            <select name="tipo" class="border rounded p-2 w-full" required>
-                                @foreach ($tipos as $name => $value)
-                                <option value="{{ $value }}" {{ old('tipo', $ticket->tipo) == $value ? 'selected' : '' }}>{{ $name }}</option>
-                                @endforeach
+                           <select name="tipo" class="border rounded p-2 w-full" required>
+                            @foreach ($tipos as $name => $value)
+                               <option value="{{ $value }}" {{ old('tipo', $ticket->tipo) == $value ? 'selected' : '' }}>{{ $name }}</option>
+                            @endforeach
                             </select>
                         </td>
+
 
                         <td class="border p-2 text-center text-white">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
                     </tr>
                 </tbody>
             </table>
-
-            <!-- Seccion para el historial de cambios del ticket -->
-            @if(Auth::user()->rol !== 'usuario')
-            <div class="mt-8">
-                <h3 class="text-xl font-semibold text-white text-center">Historial de Cambios</h3>
-                <div class="bg-gray-700 p-4 rounded">
-                    @forelse ($ticket->ticketChanges as $change)
-                    <div class="mb-2">
-                        <strong class="text-lujoYel">{{ $change->user->name }}:</strong>
-                        <span class="text-white">Cambió {{ $change->change_type }} de "{{ $change->old_value }}" a "{{ $change->new_value }}"</span>
-                        <small class="block text-gray-400">{{ $change->created_at->diffForHumans() }}</small>
-                    </div>
-                    @empty
-                    <p class="text-white">No hay cambios registrados para este ticket.</p>
-                    @endforelse
-                </div>
-            </div>
-            @endif
 
             <div class="mt-8">
                 <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
@@ -128,29 +111,29 @@
                     Guardar cambios
                 </button>
             </div>
-        </form>
-        @else
-        @csrf
-        @method('PUT')
-        <!-- Tabla para mostrar los detalles del ticket -->
-        <table class="w-full mt-4 border-collapse border">
-            <thead>
-                <tr class="bg-lujoNeg text-white">
-                    <!-- <th class="border p-2">Descripción</th> -->
-                    <th class="border p-2">Estado</th>
-                    <th class="border p-2">Tipo</th>
-                    <th class="border p-2">Fecha de Creación</th>
-                </tr>
-            </thead>
-            <tbody class="bg-gray-800">
-                <tr class="border">
-                    <!-- <td class="border p-2">{{ $ticket->descripcion }}</td> -->
-                    <td class="border p-2 text-center text-white">{{ $ticket->estado }}</td>
-                    <td class="border p-2 text-center text-white">{{ ucfirst($ticket->tipo) }}</td>
-                    <td class="border p-2 text-center text-white">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
-                </tr>
-            </tbody>
-        </table>
+            </form>
+            @else
+            @csrf
+            @method('PUT')
+            <!-- Tabla para mostrar los detalles del ticket -->
+            <table class="w-full mt-4 border-collapse border">
+                <thead>
+                    <tr class="bg-lujoNeg text-white">
+                        <!-- <th class="border p-2">Descripción</th> -->
+                        <th class="border p-2">Estado</th>
+                        <th class="border p-2">Tipo</th>
+                        <th class="border p-2">Fecha de Creación</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-800">
+                    <tr class="border">
+                        <!-- <td class="border p-2">{{ $ticket->descripcion }}</td> -->
+                        <td class="border p-2 text-center text-white">{{ $ticket->estado }}</td>
+                        <td class="border p-2 text-center text-white">{{ ucfirst($ticket->tipo) }}</td>
+                        <td class="border p-2 text-center text-white">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
         <div class="mt-8">
             <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
@@ -185,36 +168,36 @@
         <p class="mt-4 text-white">No hay archivos adjuntos.</p>
         @endif
 
-        <!-- Botón "Volver a la lista" estilizado -->
-        <div class="mt-6 text-center">
-            <a href="{{ route('tickets.index') }}" class="inline-block px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
-                Volver a la lista
-            </a>
-        </div>
-        @endif
-        <div class="mt-8">
-            <h3 class="text-xl font-semibold text-white text-center">Conversación</h3>
-            <div class="bg-gray-700 p-4 rounded">
-                @forelse ($ticket->messages as $message)
-                <div class="mb-2">
-                    <strong class="text-lujoYel">{{ $message->user->name }}:</strong>
-                    <span class="text-white">{{ $message->content }}</span>
-                    <small class="block text-gray-400">{{ $message->created_at->diffForHumans() }}</small>
-                </div>
-                @empty
-                <p class="text-white">No hay mensajes en esta conversación.</p>
-                @endforelse
+            <!-- Botón "Volver a la lista" estilizado -->
+            <div class="mt-6 text-center">
+                <a href="{{ route('tickets.index') }}" class="inline-block px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
+                    Volver a la lista
+                </a>
             </div>
-        </div>
-        <div class="mt-4">
-            <form action="{{ route('tickets.message.store', $ticket->id) }}" method="POST">
-                @csrf
-                <textarea name="content" class="w-full p-2 rounded" placeholder="Escribe tu mensaje..." rows="3"></textarea>
-                <button type="submit" class="mt-2 w-full px-4 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">Enviar Mensaje</button>
-            </form>
+            @endif
+            <div class="mt-8">
+                <h3 class="text-xl font-semibold text-white text-center">Conversación</h3>
+                <div class="bg-gray-700 p-4 rounded">
+                     @forelse ($ticket->messages as $message)
+                          <div class="mb-2">
+                             <strong class="text-lujoYel">{{ $message->user->name }}:</strong>
+                             <span class="text-white">{{ $message->content }}</span>
+                             <small class="block text-gray-400">{{ $message->created_at->diffForHumans() }}</small>
+                          </div>
+                     @empty
+                          <p class="text-white">No hay mensajes en esta conversación.</p>
+                     @endforelse
+                </div>
+            </div>
+            <div class="mt-4">
+                <form action="{{ route('tickets.message.store', $ticket->id) }}" method="POST">
+                   @csrf
+                   <textarea name="content" class="w-full p-2 rounded" placeholder="Escribe tu mensaje..." rows="3"></textarea>
+                   <button type="submit" class="mt-2 w-full px-4 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">Enviar Mensaje</button>
+                </form>
+             </div>
         </div>
     </div>
-</div>
 
 
 
@@ -250,16 +233,16 @@
         document.getElementById('imageModal').classList.remove('hidden'); // Show the modal
     }
 
-    // Función para cerrar el modal
-    function closeModal() {
-        document.getElementById('imageModal').classList.add('hidden'); // Hide the modal
-    }
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById('imageModal').classList.add('hidden'); // Hide the modal
+        }
         document.addEventListener("DOMContentLoaded", function () {
         let estadoSelect = document.querySelector('select[name="estado"]');
         let comentarioContainer = document.getElementById("comentarioCierreContainer");
         let comentarioInput = document.getElementById("comentarioCierre");
 
-        estadoSelect.addEventListener("change", function () {
+        estadoSelect.addEventListener("change", function() {
             if (this.value === "cerrado") {
                 comentarioContainer.classList.remove("hidden");
                 comentarioInput.setAttribute("required", "required");
@@ -269,8 +252,7 @@
             }
         });
     });
-    </script>
+</script>
 
 @endsection
 
-@endsection

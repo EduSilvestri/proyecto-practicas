@@ -56,5 +56,13 @@
                 </x-button>
             </div>
         </form>
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-600">
+                ¿Ya tienes una cuenta? 
+                <a href="{{ route('login') }}" class="underline text-sm text-blue-600 hover:text-blue-800">
+                    {{ __('Login') }}
+                </a>
+            </p>
+        </div>
     </x-authentication-card>
 </x-guest-layout>

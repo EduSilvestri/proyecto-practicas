@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TicketChange;
 
 class TicketController extends Controller
 {
@@ -13,6 +14,7 @@ class TicketController extends Controller
     {
         // Obtener el rol del usuario autenticado
         $userRol = Auth::user()->rol;
+        $userClase = Auth::user()->clase;
         $userId = Auth::id(); // ID del usuario autenticado
     
         // Filtrar los tickets basados en el rol del usuario
@@ -21,22 +23,22 @@ class TicketController extends Controller
         // Si el rol es "usuario", solo puede ver sus propios tickets
         if ($userRol == 'usuario') {
             $tickets->where('usuario_id', $userId);
-        } else {
+        } else if ($userClase == 'jefe' || $userRol == 'admin'){
             // Filtrado según el rol
             switch ($userRol) {
                 case 'it':
                     $tickets->whereIn('tipo', ['Problemas de Pagina Web']); // Solo puede ver 'Problemas de Pagina Web'
                     break;
-                case 'finanzas':
+                case 'facturacion':
                     $tickets->whereIn('tipo', ['Pagos']); // Solo puede ver 'Pagos'
                     break;
                 case 'copyright':
                     $tickets->whereIn('tipo', ['Peticion de Copyright', 'Peticion de Takedown']); // Solo puede ver 'Peticion de Copyright' y 'Peticion de Takedown'
                     break;
-                case 'contenidos':
+                case 'desarrollo':
                     $tickets->whereIn('tipo', ['Problemas de lanzamiento', 'Peticion de Actualizacion de Lanzamiento']); // Solo puede ver 'Problemas de Lanzamiento' y 'Peticion de Actualizacion de Lanzamiento'
                     break;
-                case 'atencion':
+                case 'soporte':
                     $tickets->whereIn('tipo', ['Preguntas generales']); // Solo puede ver 'Preguntas Generales'
                     break;
                 case 'admin':
@@ -46,7 +48,12 @@ class TicketController extends Controller
                     // Si el rol no coincide con ninguno de los anteriores, puede que no vean ningún ticket o todos dependiendo de lo que necesites.
                     break;
             }
+        } else if ($userClase == 'empleado'){
+            
+            $tickets->where('encargado_id', $userId);
+                
         }
+        
     
         // Agregar el filtro de estado si se proporciona
         if ($request->filled('estado')) {
@@ -54,8 +61,11 @@ class TicketController extends Controller
         }
     
         // Obtener los tickets según los filtros y paginarlos
-        $tickets = $tickets->with('user')->paginate(10)->appends($request->query());
-    
+        $tickets = $tickets->with('user', 'encargado')->paginate(10)->appends($request->query());
+
+        // if ($userRol == 'usuario') {
+        // return view('tickets.user-index', compact('tickets')); 
+        // }
         return view('tickets.index', compact('tickets'));
     }
     
@@ -120,6 +130,13 @@ class TicketController extends Controller
     
     public function show(Ticket $ticket)
     {
+         // Verificar si el ticket está en "esperando" y cambiarlo a "abierto" si el empleado lo ve
+         if ($ticket->estado == 'esperando' && Auth::user()->clase == 'empleado') {
+            $this->registerTicketChange($ticket, 'estado', 'esperando', 'abierto');
+            $ticket->estado = 'abierto';
+            $ticket->save();
+        }
+
         return view('tickets.show', compact('ticket'));
         
     }
@@ -129,6 +146,30 @@ class TicketController extends Controller
     {
         return view('tickets.edit', compact('ticket'));
     }
+
+
+    //función para asignar encargado
+    public function asignEnc(Request $request, Ticket $ticket)
+    {
+        $validatedData = $request->validate([
+            'encargado_id' => 'required',
+        ]);
+    
+        $oldEncargado = $ticket->encargado_id ? \App\Models\User::find($ticket->encargado_id)->name : 'Encargado'; 
+        $newEncargado = \App\Models\User::find($validatedData['encargado_id'])->name;
+        
+        if ($ticket->encargado_id !== $validatedData['encargado_id']) {
+            // Registrar el cambio de encargado con nombres
+            $this->registerTicketChange($ticket, 'encargado_id', $oldEncargado, $newEncargado);
+        }
+
+        $ticket->encargado_id = $validatedData['encargado_id'];
+
+        $ticket->save();
+    
+        return redirect()->route('tickets.index')->with('éxito', 'Encargado asignado correctamente.');
+    }
+    
 
     
     public function update(Request $request, Ticket $ticket)
@@ -141,6 +182,20 @@ class TicketController extends Controller
             'tipo' => 'required',
             'comentario' => $request->estado === 'cerrado' ? 'required|string' : 'nullable',
         ]);
+
+        if ($ticket->estado !== $validatedData['estado']) {
+            $this->registerTicketChange($ticket, 'estado', $ticket->estado, $validatedData['estado']);
+        }
+    
+        // Registrar cambios en la prioridad si es necesario
+        if ($ticket->prioridad !== $validatedData['prioridad']) {
+            $this->registerTicketChange($ticket, 'prioridad', $ticket->prioridad, $validatedData['prioridad']);
+        }
+    
+        // Registrar cambios en el tipo si es necesario
+        if ($ticket->tipo !== $validatedData['tipo']) {
+            $this->registerTicketChange($ticket, 'tipo', $ticket->tipo, $validatedData['tipo']);
+        }
     
         // Actualizas sólo los campos modificables
         $ticket->estado = $validatedData['estado'];
@@ -154,6 +209,18 @@ class TicketController extends Controller
         $ticket->save();
     
         return redirect()->route('tickets.index')->with('success', 'Ticket actualizado correctamente.');
+    }
+
+    private function registerTicketChange(Ticket $ticket, $changeType, $oldValue, $newValue)
+    {
+    // Guardar los cambios en la base de datos
+    TicketChange::create([
+        'ticket_id' => $ticket->id,
+        'user_id' => auth()->id(), // Guardamos el ID del usuario que realizó el cambio
+        'change_type' => $changeType, // El tipo de cambio (estado, prioridad, etc.)
+        'old_value' => $oldValue, // Valor anterior
+        'new_value' => $newValue, // Nuevo valor
+    ]);
     }
 
     
