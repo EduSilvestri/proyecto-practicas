@@ -4,6 +4,9 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
 
 class TicketShow extends Component
 {
@@ -12,6 +15,7 @@ class TicketShow extends Component
     public $prioridad;
     public $tipo;
     public $comentario;
+    public $usuariosMismoRol;
 
     public function mount(Ticket $ticket)
     {
@@ -37,6 +41,12 @@ class TicketShow extends Component
             'soporte' => ['Preguntas generales'],
             'admin' => [], // El admin tiene acceso a todos los tickets
         ];
+
+        $rolActual = Auth::user()->rol;
+
+        $this->usuariosMismoRol = User::where('rol', $rolActual)
+                                  ->where('clase', 'empleado')
+                                  ->get();
     }
 
     public function actualizar()
@@ -63,7 +73,8 @@ class TicketShow extends Component
     {
         return view('livewire.ticket-show', [
             'roles' => $this->roles,
-            'tiposPorRol' => $this->tiposPorRol
+            'tiposPorRol' => $this->tiposPorRol,
+            'usuariosMismoRol' => $this->usuariosMismoRol
         ]);
     }
 }
