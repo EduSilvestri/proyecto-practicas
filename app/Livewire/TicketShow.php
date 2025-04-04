@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Ticket;
-use Illuminate\Support\Facades\Auth;
 
 class TicketShow extends Component
 {
@@ -20,6 +19,7 @@ class TicketShow extends Component
         $this->estado = $ticket->estado;
         $this->prioridad = $ticket->prioridad;
         $this->tipo = $ticket->tipo;
+        $this->comentario = $ticket->comentario;
     }
 
     public function actualizar()
