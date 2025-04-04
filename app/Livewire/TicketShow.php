@@ -16,6 +16,7 @@ class TicketShow extends Component
     public $tipo;
     public $comentario;
     public $usuariosMismoRol;
+    public $files;
 
     public function mount(Ticket $ticket)
     {
@@ -24,6 +25,9 @@ class TicketShow extends Component
         $this->prioridad = $ticket->prioridad;
         $this->tipo = $ticket->tipo;
         $this->comentario = $ticket->comentario;
+
+        $this->files = is_array($ticket->archivos) ? $ticket->archivos : explode(',', $ticket->archivos); // Ejemplo de convertir una cadena separada por comas a un array
+
 
         $this->roles = [
             'it' => 'IT',
@@ -47,6 +51,8 @@ class TicketShow extends Component
         $this->usuariosMismoRol = User::where('rol', $rolActual)
                                   ->where('clase', 'empleado')
                                   ->get();
+
+        $this->files = $ticket->archivos;
     }
 
     public function actualizar()
@@ -74,7 +80,8 @@ class TicketShow extends Component
         return view('livewire.ticket-show', [
             'roles' => $this->roles,
             'tiposPorRol' => $this->tiposPorRol,
-            'usuariosMismoRol' => $this->usuariosMismoRol
+            'usuariosMismoRol' => $this->usuariosMismoRol,
+            'files' => $this->files
         ]);
     }
 }

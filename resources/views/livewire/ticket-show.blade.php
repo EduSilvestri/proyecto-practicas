@@ -231,4 +231,25 @@
     @endif
 </div>
     </div>
+    <div id="imageModal" class="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75 hidden">
+    <div class="relative bg-black p-4 rounded-lg w-[600px] h-auto">
+        <div class="flex justify-end">
+            <!-- Botón de cerrar -->
+            <button onclick="closeModal()" class="px-6 py-2 text-black font-semibold rounded-lg bg-lujoYel">
+                Cerrar
+            </button>
+        </div>
+
+        <!-- Imagen dentro del modal -->
+        <div style="width: 100%; display: flex; justify-content: center; overflow: hidden;">
+            <img id="modalImage" src="" alt="Imagen grande" style="width: 900px; height: 600px; object-fit: contain; margin: 0 auto;">
+        </div>
+
+        <div class="flex justify-center">
+            <a id="downloadLink" href="" download class="px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
+                Descargar Imagen
+            </a>
+        </div>
+    </div>
+</div>
 </div>
