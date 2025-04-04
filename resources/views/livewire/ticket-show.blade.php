@@ -39,15 +39,15 @@
                             </select>
                         </td>
                         <td class="border p-2 text-center">
-                            <select name="tipo" class="border rounded p-2 w-full" required>
-                                @foreach ($roles as $role => $name)
+                        <select name="tipo" class="border rounded p-2 w-full" required>
+                            @foreach ($roles as $role => $name)
                                 @foreach ($tiposPorRol[$role] as $tipo)
-                                <option value="{{ $tipo }}" {{ old('tipo', $ticket->tipo) == $tipo ? 'selected' : '' }}>
-                                    {{ $name }}: {{ $tipo }}
-                                </option>
+                                    <option value="{{ $tipo }}" {{ old('tipo', $ticket->tipo) == $tipo ? 'selected' : '' }}>
+                                        {{ $name }}: {{ $tipo }}
+                                    </option>
                                 @endforeach
-                                @endforeach
-                            </select>
+                            @endforeach
+                        </select>
                         </td>
 
 
