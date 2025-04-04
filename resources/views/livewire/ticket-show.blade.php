@@ -204,5 +204,31 @@
                 <button type="submit" class="mt-2 w-full px-4 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">Enviar Mensaje</button>
             </form>
         </div>
+        <div class="mt-8 bg-lujoNeg p-6 rounded-lg shadow-lg">
+    @if(Auth::user()->rol !== 'usuario')
+    <div class="mt-8">
+        <h3 class="text-xl font-semibold text-white text-center">Historial de Cambios</h3>
+        <div class="bg-gray-700 p-4 rounded">
+            @forelse ($ticket->ticketChanges as $change)
+            <div class="mb-2">
+                <strong class="text-lujoYel">{{ $change->user->name }}:</strong>
+                <span class="text-white">Cambió {{ $change->change_type }} de {{ strtoupper($change->old_value) }} a {{ strtoupper($change->new_value) }}</span>
+
+                <!-- Verificar si el cambio fue de estado y si el estado fue cerrado -->
+                @if($change->change_type === 'estado' && $change->new_value === 'cerrado' && $ticket->comentario)
+                <div class="mt-1 text-white bg-gray-600 rounded">
+                    <strong class="text-lujoYel">Comentario de Cierre:</strong> {{ $ticket->comentario }}
+                </div>
+                @endif
+                <small class="block text-gray-400">{{ $change->created_at->diffForHumans() }}</small>
+
+            </div>
+            @empty
+            <p class="text-white">No hay cambios registrados para este ticket.</p>
+            @endforelse
+        </div>
+    </div>
+    @endif
+</div>
     </div>
 </div>
