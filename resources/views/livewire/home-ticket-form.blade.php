@@ -71,15 +71,19 @@
         form.classList.toggle('show');
       }
   
-      document.getElementById('screenshotBtn').addEventListener('click', function() {
-        html2canvas(document.documentElement).then(function(canvas) {
-          var preview = document.getElementById('screenshotPreview');
+      html2canvas(document.documentElement, {
+        ignoreElements: function(element) {
+        return element.closest('#floatingForm') !== null;
+      }
+      }).then(function(canvas) {
+        var preview = document.getElementById('screenshotPreview');
           preview.innerHTML = "";
           canvas.style.width = "300px";
           canvas.style.height = "auto";
           preview.appendChild(canvas);
-          document.getElementById('screenshot').value = canvas.toDataURL('image/png');
-        });
+        @this.set('screenshot', canvas.toDataURL('image/png'));
+      }).catch(function(error) {
+        console.error("Error al capturar la pantalla:", error);
       });
   
       document.getElementById('archivos').addEventListener('change', function() {
