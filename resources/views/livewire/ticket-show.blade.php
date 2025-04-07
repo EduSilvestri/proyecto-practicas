@@ -252,4 +252,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let estadoSelect = document.querySelector('select[name="estado"]');
+        let comentarioContainer = document.getElementById("comentarioCierreContainer");
+        let comentarioInput = document.getElementById("comentarioCierre");
+
+        // Ejecutar la lógica al cargar la página, por si el estado ya es "cerrado"
+        if (estadoSelect.value === "cerrado") {
+            comentarioContainer.classList.remove("hidden");
+            comentarioInput.setAttribute("required", "required");
+        }
+
+        // Detectar el cambio en el select
+        estadoSelect.addEventListener("change", function() {
+            if (this.value === "cerrado") {
+                comentarioContainer.classList.remove("hidden");
+                comentarioInput.setAttribute("required", "required");
+            } else {
+                comentarioContainer.classList.add("hidden");
+                comentarioInput.removeAttribute("required");
+            }
+        });
+    });
+</script>
 </div>
