@@ -52,7 +52,7 @@ class TicketShow extends Component
                                   ->where('clase', 'empleado')
                                   ->get();
 
-        $this->files = $ticket->archivos;
+        // $this->files = $ticket->archivos;
     }
 
     public function actualizar()
