@@ -40,7 +40,20 @@
 
         @stack('modals')
         @stack('scripts')
-
         @livewireScripts
+        <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('showTicketIndex', () => {
+                // 1. Actualizar URL sin recargar
+                history.pushState({}, '', '{{ route("tickets.index") }}');
+                
+                // 2. Cargar el componente de lista
+                Livewire.dispatch('load-component', {
+                    component: 'ticket-index',
+                    target: 'dynamic-content'
+                });
+            });
+        });
+    </script>
     </body>
 </html>

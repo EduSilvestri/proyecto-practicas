@@ -57,7 +57,7 @@
 
       <div class="field-group">
         <label for="archivos">Subir imágenes (máximo 5)</label>
-        <input type="file" id="archivos" wire:model="archivos" multiple accept="image/*">
+        <input type="file" id="archivos" wire:model="archivos" multiple accept="image/jpeg,image/png,image/jpg,image/gif">
         <small>Puedes subir hasta 5 imágenes. Resolución máxima permitida: 1920x1080.</small>
       </div>
 

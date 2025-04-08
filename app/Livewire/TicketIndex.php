@@ -14,7 +14,7 @@ class TicketIndex extends Component
     public $selectedTicketId = null;
 
     // Escuchar el evento emitido desde TicketShow
-    protected $listeners = ['volverALaLista' => 'volverALaLista'];
+    protected $listeners = ['refreshTickets' => 'refresh']; // Escucha eventos
 
     public $estado = null;  // Variable para el filtro de estado
     public $q = null;       // Variable para el filtro de búsqueda

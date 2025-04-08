@@ -1,4 +1,4 @@
-<x-app-layout>
+<!-- <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
@@ -12,4 +12,19 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-app-layout> -->
+
+<div>
+    @include('layouts.navigation')
+    
+    <div class="min-h-screen bg-gray-100">
+        <div id="dynamic-content">
+            <!-- Aquí se cargarán los componentes dinámicamente -->
+            @if(request()->routeIs('tickets.index'))
+                <livewire:ticket-index />
+            @elseif(request()->routeIs('tickets.show'))
+                <livewire:ticket-show :ticket="$ticket" />
+            @endif
+        </div>
+    </div>
+</div>
