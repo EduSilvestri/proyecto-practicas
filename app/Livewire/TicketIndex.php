@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 class TicketIndex extends Component
 {
     use WithPagination;
+    public $selectedTicketId = null;
+
+    // Escuchar el evento emitido desde TicketShow
+    protected $listeners = ['volverALaLista' => 'volverALaLista'];
 
     public $estado = null;  // Variable para el filtro de estado
     public $q = null;       // Variable para el filtro de búsqueda
@@ -77,7 +81,20 @@ class TicketIndex extends Component
         // Obtener los tickets con paginación y pasar los filtros de búsqueda
         $tickets = $tickets->with('user', 'encargado')->paginate(10)->appends(request()->query());
 
-        return view('livewire.ticket-index', compact('tickets'));
+        return view('livewire.ticket-index', [
+            'tickets' => $tickets,
+            'selectedTicket' => $this->selectedTicketId ? Ticket::find($this->selectedTicketId) : null,
+        ]);
+    }
+
+    // Este método se llama cuando el usuario hace clic en el botón "Ver"
+    public function showTicket($ticketId)
+    {
+        // Asigna el ticket seleccionado
+        $this->selectedTicketId = $ticketId;
+
+        // Esto hace que Livewire actualice la vista de manera reactiva
+        // Puedes usar una propiedad para indicar si deberías mostrar el TicketShow
     }
 
     // Función para actualizar el estado

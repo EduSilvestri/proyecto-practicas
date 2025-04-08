@@ -3,6 +3,10 @@
 
     <!-- VISTA PARA USUARIOS -->
     @if(Auth::user()->isUser())
+        @if($selectedTicketId)
+        <!-- Mostrar el componente de TicketShow solo si hay un ticket seleccionado -->
+        <livewire:ticket-show :ticketId="$selectedTicketId" />
+        @else
 <table class="w-full mt-4 border-collapse border">
     <thead>
         <tr class="bg-lujoNeg text-white">
@@ -21,17 +25,23 @@
                 <td class="border p-2 text-center">{{ ucfirst($ticket->tipo) }}</td>
                 <td class="border p-2 text-center">{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
                 <td class="border p-2 text-center">
-                    <a href="{{ route('tickets.show', $ticket) }}" class="text-blue-500">Ver</a>
+                <button wire:click="showTicket({{ $ticket->id }})" class="text-blue-500">Ver</button>
+
                 </td>
             </tr>
         @endforeach
     </tbody>
 </table>
+        @endif
 @else
 
 <!-- VISTA PARA TECNICOS -->
     <!-- Caja del formulario con borde -->
     <div class="bg-lujoNeg rounded p-4 mb-4">
+    @if($selectedTicketId)
+        <!-- Mostrar el componente de TicketShow solo si hay un ticket seleccionado -->
+        <livewire:ticket-show :ticketId="$selectedTicketId" />
+    @else
         <!-- Formulario de búsqueda y filtrado -->
         <form wire:submit.prevent="search">
             <div class="flex flex-wrap gap-4 justify-center">
@@ -57,7 +67,6 @@
         @if(session('exito'))
             <p class="text-green-500">{{ session('exito') }}</p>
         @endif
-
         <table class="w-full mt-0 border-collapse border">
             <thead>
             <tr class="bg-lujoNeg text-white">
@@ -112,12 +121,13 @@
                         @endif
                         <td class="border p-2 text-center">{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
                         <td class="border p-2 text-center">
-                            <a href="{{ route('tickets.show', $ticket) }}" class="text-blue-500">Ver</a>
+                        <button wire:click="showTicket({{ $ticket->id }})" class="text-blue-500">Ver</button>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+        @endif
 
         <!-- Paginación -->
         <div class="mt-4">
@@ -126,4 +136,6 @@
     </div>
     @endif
 </div>
+
+
 

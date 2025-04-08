@@ -3,7 +3,7 @@
 @section('content')
     
     <!-- Componente Livewire -->
-    @livewire('ticket-show', ['ticket' => $ticket])
+    @livewire('ticket-show', ['ticketId' => $ticket->id])
 
 
 @endsection

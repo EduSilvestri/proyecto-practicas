@@ -6,10 +6,12 @@ use Livewire\Component;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
+use Livewire\Attributes\On;
+use Illuminate\Contracts\View\View;
 
 class TicketShow extends Component
 {
+    public $ticketId;
     public $ticket;
     public $estado;
     public $prioridad;
@@ -18,17 +20,23 @@ class TicketShow extends Component
     public $usuariosMismoRol;
     public $files;
 
-    public function mount(Ticket $ticket)
+    // Cambiar el tipo de parámetro a solo ID del ticket
+    public function mount($ticketId)
     {
-        $this->ticket = $ticket;
-        $this->estado = $ticket->estado;
-        $this->prioridad = $ticket->prioridad;
-        $this->tipo = $ticket->tipo;
-        $this->comentario = $ticket->comentario;
+        // Asignar el ID y cargar el ticket con el ID
+        $this->ticketId = $ticketId;
+        $this->ticket = Ticket::find($ticketId);
 
-        $this->files = is_array($ticket->archivos) ? $ticket->archivos : explode(',', $ticket->archivos); // Ejemplo de convertir una cadena separada por comas a un array
+        // Verificar si el ticket existe
+        if ($this->ticket) {
+            $this->estado = $this->ticket->estado;
+            $this->prioridad = $this->ticket->prioridad;
+            $this->tipo = $this->ticket->tipo;
+            $this->comentario = $this->ticket->comentario;
+            $this->files = is_array($this->ticket->archivos) ? $this->ticket->archivos : explode(',', $this->ticket->archivos); // Convertir a array si es necesario
+        }
 
-
+        // Lógica de roles (igual que antes)
         $this->roles = [
             'it' => 'IT',
             'facturacion' => 'Facturación',
@@ -51,8 +59,6 @@ class TicketShow extends Component
         $this->usuariosMismoRol = User::where('rol', $rolActual)
                                   ->where('clase', 'empleado')
                                   ->get();
-
-        // $this->files = $ticket->archivos;
     }
 
     public function actualizar()
