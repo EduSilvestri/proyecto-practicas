@@ -53,31 +53,5 @@ class Ticket extends Model
     ]);
 }
 
-public function getArchivosAdjuntosAttribute()
-{
-    if (empty($this->archivos)) {
-        return [];
-    }
-    
-    // Decodificar el JSON y asegurarse de que es un array
-    $archivos = json_decode($this->archivos, true);
-    
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        // Si no es JSON válido, tratar como string simple
-        $archivos = [$this->archivos];
-    }
-    
-    // Filtrar y mapear a URLs válidas
-    return collect($archivos)->filter()->map(function ($archivo) {
-        // Eliminar comillas si existen
-        $archivo = trim($archivo, '"\'');
-        
-        return [
-            'path' => $archivo,
-            'url' => asset('storage/'.$archivo),
-            'exists' => Storage::disk('public')->exists($archivo)
-        ];
-    })->toArray();
-}
     
 }
