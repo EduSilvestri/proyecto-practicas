@@ -65,6 +65,9 @@
             </div>
 
             <!-- Sección para visualizar archivos adjuntos y capturas de pantalla -->
+             @php 
+             $files = json_decode($ticket->archivos, true) ??[];
+             @endphp 
             @if($ticket->archivos)
             @if($files && count($files) > 0)
             <div class="mt-8">
