@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html wire:navigate lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -54,6 +54,19 @@
                 });
             });
         });
+
+        document.addEventListener('livewire:init', () => {
+        Livewire.on('navigate', (data) => {
+            // Navegación SPA
+            window.history.pushState({}, '', data.route);
+            
+            // Actualizar el estado activo en todos los componentes Livewire
+            Livewire.dispatch('urlChanged', {url: data.route});
+            
+            // Cargar la nueva página (opcional, depende de tu implementación)
+            Livewire.navigate(data.route);
+        });
+    });
     </script>
     </body>
 </html>

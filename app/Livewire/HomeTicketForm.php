@@ -93,8 +93,11 @@ class HomeTicketForm extends Component
     // Muestra un mensaje de éxito
     session()->flash('exito', 'Ticket creado correctamente.');
 
-    // Redirige a la vista show del ticket recién creado
-    return redirect()->route('tickets.show', $ticket->id);
+   // Redirección reactiva al ticket recién creado
+   return $this->redirect(
+    route('tickets.show', $ticket->id),
+    navigate: true
+);
 }
 
 

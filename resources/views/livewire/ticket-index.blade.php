@@ -130,8 +130,8 @@
         @endif
 
         <!-- Paginación -->
-        <div class="mt-4">
-            {{ $tickets->links() }}
+        <div class="mt-8">
+            {{ $tickets->links('vendor.livewire.tailwind') }}
         </div>
     </div>
     @endif

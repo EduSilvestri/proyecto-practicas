@@ -61,14 +61,22 @@
         <small>Puedes subir hasta 5 imágenes. Resolución máxima permitida: 1920x1080.</small>
       </div>
 
-      <button type="submit" class="submit-btn">Enviar ticket</button>
+      <button type="submit"
+        wire:loading.attr="disabled"
+        wire:target="submit"
+        class="submit-btn">
+        <span wire:loading.remove wire:target="submit">Enviar ticket</span>
+        <span wire:loading wire:target="submit">
+          Enviando...
+        </span>
+      </button>
     </form>
   </div>
 
   <!-- Script para el widget flotante y funcionalidad de captura -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
-    function toggleForm(){
+    function toggleForm() {
       var form = document.getElementById('floatingForm');
       form.classList.toggle('show');
     }
@@ -121,10 +129,12 @@
       box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
       transition: background-color 0.3s;
     }
+
     .floating-btn:hover {
       background-color: #202617;
       color: white;
     }
+
     .form-container {
       position: fixed;
       bottom: 90px;
@@ -138,24 +148,29 @@
       max-height: 80vh;
       overflow-y: auto;
     }
+
     .show {
       display: block !important;
     }
+
     /* Estructura básica del formulario */
     form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
+
     .field-group {
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
     }
+
     .field-group label {
       font-weight: bold;
       color: #333;
     }
+
     .field-group input[type="text"],
     .field-group input[type="email"],
     .field-group input[type="file"],
@@ -166,10 +181,12 @@
       border-radius: 4px;
       font-size: 0.9rem;
     }
+
     .field-group small {
       font-size: 0.75rem;
       color: #666;
     }
+
     .capture-btn {
       background-color: #ccc;
       color: #000;
@@ -178,9 +195,11 @@
       padding: 0.5rem 1rem;
       cursor: pointer;
     }
+
     .capture-btn:hover {
       background-color: #aaa;
     }
+
     .submit-btn {
       background-color: #efe300;
       color: #202617;
@@ -192,11 +211,10 @@
       font-weight: bold;
       margin-top: 1rem;
     }
+
     .submit-btn:hover {
       background-color: #202617;
       color: white;
     }
   </style>
 </div>
-
-  

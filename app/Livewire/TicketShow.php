@@ -200,8 +200,6 @@ class TicketShow extends Component
         // Opción 1: Redirección SPA (recomendado)
         return $this->redirect(route('tickets.index'), navigate: true);
         
-        // Opción 2: Emitir evento (alternativa)
-        // $this->dispatch('showTicketIndex');
     }
 
     public function render(): View
