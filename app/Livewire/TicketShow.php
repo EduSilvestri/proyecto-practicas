@@ -21,6 +21,8 @@ class TicketShow extends Component
     public $encargado_id;
     public $messageContent = ''; // Para almacenar el mensaje nuevo
     public $messages = []; // Para almacenar los mensajes existentes
+    public $showComentarioField = false;
+
     
     // Definimos las propiedades para roles y tipos
     public $roles = [];
@@ -34,6 +36,20 @@ class TicketShow extends Component
         $this->loadUsersSameRole();
         $this->encargado_id = $this->ticket->encargado_id;
         $this->loadMessages();
+        $this->showComentarioField = $this->ticket->estado === 'cerrado';
+
+         // Limpiar el comentario si el ticket no está cerrado
+    if ($this->ticket->estado !== 'cerrado') {
+        $this->comentario = null;
+    }
+    }
+
+    public function updatedEstado($value)
+    {
+        $this->showComentarioField = $value === 'cerrado';
+        if ($value !== 'cerrado') {
+            $this->comentario = null;
+        }
     }
 
     protected function loadMessages()
@@ -156,12 +172,19 @@ class TicketShow extends Component
     $oldEstado = $this->ticket->estado;
     $oldPrioridad = $this->ticket->prioridad;
     $oldTipo = $this->ticket->tipo;
+    $oldComentario = $this->ticket->comentario;
+
+    // Si estamos cerrando el ticket, usar el nuevo comentario
+    // Si estamos reabriendo, limpiar el comentario
+    $nuevoComentario = $this->estado === 'cerrado' ? $this->comentario : null;
+
+    
 
     $this->ticket->update([
         'estado' => $this->estado,
         'prioridad' => $this->prioridad,
         'tipo' => $this->tipo,
-        'comentario' => $this->estado === 'cerrado' ? $this->comentario : null,
+        'comentario' =>$nuevoComentario,
     ]);
 
     // Registrar cambios en el historial
@@ -189,6 +212,16 @@ class TicketShow extends Component
             'tipo',
             $oldTipo,
             $this->tipo
+        );
+    }
+
+    // Registrar comentario solo si se está cerrando el ticket y hay un comentario nuevo
+    if ($this->estado === 'cerrado' && $this->comentario && $oldComentario !== $this->comentario) {
+        $this->ticket->recordChange(
+            Auth::user(),
+            'comentario_cierre',
+            $oldComentario ?? '(sin comentario)',
+            $this->comentario
         );
     }
 

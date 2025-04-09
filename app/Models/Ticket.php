@@ -48,8 +48,8 @@ class Ticket extends Model
     return $this->ticketChanges()->create([
         'user_id' => $user->id,
         'change_type' => $changeType,
-        'old_value' => $oldValue,
-        'new_value' => $newValue
+        'old_value' => $oldValue ?? '(ninguno)',
+        'new_value' => $newValue ?? '(ninguno)'
     ]);
 }
 
