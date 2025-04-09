@@ -53,11 +53,9 @@ class TicketShow extends Component
         $this->comentario = $this->ticket->comentario;
         
         // Procesamiento seguro de archivos
-        $this->files = $this->ticket->archivos 
-            ? (is_array($this->ticket->archivos) 
-                ? $this->ticket->archivos 
-                : explode(',', $this->ticket->archivos))
-            : [];
+    $this->files = $this->ticket->archivos 
+    ? json_decode($this->ticket->archivos, true) // Decodificar JSON
+    : [];
     }
 
     public function enviarMensaje()

@@ -91,7 +91,8 @@ class TicketIndex extends Component
     public function showTicket($ticketId)
     {
         // Asigna el ticket seleccionado
-        $this->selectedTicketId = $ticketId;
+        // $this->selectedTicketId = $ticketId;
+        return $this->redirect(route('tickets.show', $ticketId), navigate: true);
 
         // Esto hace que Livewire actualice la vista de manera reactiva
         // Puedes usar una propiedad para indicar si deberías mostrar el TicketShow

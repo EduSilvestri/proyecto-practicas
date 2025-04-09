@@ -61,29 +61,30 @@
             </div>
 
             <!-- Sección para visualizar archivos adjuntos -->
-            @if($files && count($files) > 0)
-            <div class="mt-8">
-                <h3 class="text-xl text-center font-semibold text-white">Archivos Adjuntos y Capturas</h3>
-                <div class="flex justify-center space-x-4 mt-2 flex-wrap">
-                    @foreach($files as $file)
-                    <div class="text-white mb-4">
-                        @if(in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
-                        <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px;" 
-                             class="mb-2 cursor-pointer" 
-                             onclick="openModal('{{ asset('storage/' . $file) }}')">
-                        @else
-                        <a href="{{ asset('storage/' . $file) }}" target="_blank" 
-                           class="text-lujoYel hover:underline block mb-2">
-                           {{ basename($file) }}
-                        </a>
-                        @endif
-                    </div>
-                    @endforeach
-                </div>
-            </div>
+           <!-- Sección para visualizar archivos adjuntos -->
+@if($files && count($files) > 0)
+<div class="mt-8">
+    <h3 class="text-xl text-center font-semibold text-white">Archivos Adjuntos y Capturas</h3>
+    <div class="flex justify-center space-x-4 mt-2 flex-wrap">
+        @foreach($files as $file)
+        <div class="text-white mb-4">
+            @if(in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
+            <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px;" 
+                 class="mb-2 cursor-pointer" 
+                 onclick="openModal('{{ asset('storage/' . $file) }}')">
             @else
-            <p class="mt-4 text-white">No hay archivos adjuntos.</p>
+            <a href="{{ asset('storage/' . $file) }}" target="_blank" 
+               class="text-lujoYel hover:underline block mb-2">
+               {{ basename($file) }}
+            </a>
             @endif
+        </div>
+        @endforeach
+    </div>
+</div>
+@else
+<p class="mt-4 text-white">No hay archivos adjuntos.</p>
+@endif
 
             <div class="mt-6 text-center">
                 <button type="button" wire:click="volverALaLista" 
