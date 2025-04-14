@@ -101,37 +101,56 @@ class TicketShow extends Component
     $this->dispatch('scrollToMessage');
 }
 
-    public function asignarEncargado()
-    {
-        $this->validate([
-            'encargado_id' => 'required|exists:users,id'
-        ]);
+// En TicketShow.php, modifica el método asignarEncargado()
+public function asignarEncargado()
+{
+    $this->validate([
+        'encargado_id' => 'required|exists:users,id'
+    ]);
+
+    $oldEncargadoName = $this->ticket->encargado ? $this->ticket->encargado->name : 'Ninguno';
+    $newEncargado = User::find($this->encargado_id);
+    $oldEncargadoId = $this->ticket->encargado_id;
+    $oldEstado = $this->ticket->estado;
+
+    // Preparar los datos para actualizar
+    $updates = ['encargado_id' => $this->encargado_id];
     
-        // Obtener nombres antes de actualizar
-        $oldEncargadoName = $this->ticket->encargado ? $this->ticket->encargado->name : 'Ninguno';
-        $newEncargado = User::find($this->encargado_id);
-        
-        // Guardar el ID original para comparación
-        $oldEncargadoId = $this->ticket->encargado_id;
-    
-        // Actualizar el ticket
-        $this->ticket->update([
-            'encargado_id' => $this->encargado_id
-        ]);
-    
-        // Solo registrar cambio si realmente hubo modificación
-        if ($oldEncargadoId != $this->encargado_id) {
-            $this->ticket->recordChange(
-                Auth::user(),
-                'encargado',
-                $oldEncargadoName,
-                $newEncargado->name
-            );
-        }
-    
-        return $this->redirect(route('tickets.index'), navigate: true);
+    // Si el ticket está en "esperando" y el usuario actual es el nuevo encargado
+    // Cambiar automáticamente el estado a "abierto"
+    if ($this->ticket->estado === 'esperando' && Auth::id() === $this->encargado_id) {
+        $updates['estado'] = 'abierto';
     }
 
+    // Actualizar el ticket
+    $this->ticket->update($updates);
+
+    // Registrar cambio de encargado si hubo modificación
+    if ($oldEncargadoId != $this->encargado_id) {
+        $this->ticket->recordChange(
+            Auth::user(),
+            'encargado',
+            $oldEncargadoName,
+            $newEncargado->name
+        );
+    }
+
+    // Registrar cambio de estado si se modificó
+    if (isset($updates['estado']) && $oldEstado !== $updates['estado']) {
+        $this->ticket->recordChange(
+            Auth::user(),
+            'estado',
+            $oldEstado,
+            $updates['estado']
+        );
+        
+        // Actualizar la propiedad local para reflejar el cambio
+        $this->estado = $updates['estado'];
+    }
+    
+    // Mostrar mensaje de éxito
+    session()->flash('message', 'Encargado asignado correctamente.');
+}
     protected function loadRolesAndTypes()
     {
         $this->roles = [
@@ -159,7 +178,8 @@ class TicketShow extends Component
                                     ->get();
     }
 
-    public function actualizar()
+   
+public function actualizar()
 {
     $this->validate([
         'estado' => 'required',
@@ -174,17 +194,24 @@ class TicketShow extends Component
     $oldTipo = $this->ticket->tipo;
     $oldComentario = $this->ticket->comentario;
 
+    // Validar cambio de estado a "abierto" por el encargado
+    if ($oldEstado === 'esperando' && $this->estado === 'abierto') {
+        // Verificar que el usuario actual es el encargado
+        if (Auth::id() !== $this->ticket->encargado_id) {
+            session()->flash('error', 'Solo el encargado asignado puede abrir este ticket.');
+            return;
+        }
+    }
+
     // Si estamos cerrando el ticket, usar el nuevo comentario
     // Si estamos reabriendo, limpiar el comentario
     $nuevoComentario = $this->estado === 'cerrado' ? $this->comentario : null;
-
-    
 
     $this->ticket->update([
         'estado' => $this->estado,
         'prioridad' => $this->prioridad,
         'tipo' => $this->tipo,
-        'comentario' =>$nuevoComentario,
+        'comentario' => $nuevoComentario,
     ]);
 
     // Registrar cambios en el historial
@@ -215,7 +242,6 @@ class TicketShow extends Component
         );
     }
 
-    // Registrar comentario solo si se está cerrando el ticket y hay un comentario nuevo
     if ($this->estado === 'cerrado' && $this->comentario && $oldComentario !== $this->comentario) {
         $this->ticket->recordChange(
             Auth::user(),
@@ -225,7 +251,6 @@ class TicketShow extends Component
         );
     }
 
-    // Redirigir a la lista de tickets después de guardar
     return $this->redirect(route('tickets.index'), navigate: true);
 }
     public function volverALaLista()

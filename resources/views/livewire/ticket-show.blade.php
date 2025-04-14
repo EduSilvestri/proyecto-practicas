@@ -20,7 +20,7 @@
         .custom-select {
             background: rgba(40, 42, 54, 0.9);
             border: 1px solid rgba(68, 71, 90, 0.5);
-            color: #f8f8f2; /* Color de texto neutro */
+            color: #f8f8f2;
             padding: 0.5rem 1rem;
             border-radius: 6px;
             width: 100%;
@@ -31,49 +31,74 @@
             background-repeat: no-repeat;
             background-position: right 0.75rem center;
             background-size: 1rem;
+            text-align: center;
         }
 
-        .custom-select:focus {
-            border-color: #bd93f9;
-            box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.2);
-            outline: none;
+        /* Estilos para los selects con apariencia de pill */
+        .custom-select-pill {
+            background: rgba(40, 42, 54, 0.9);
+            border: 1px solid rgba(68, 71, 90, 0.5);
+            color: #f8f8f2;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236272a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+            text-align: center;
         }
 
-        /* Colores para estados seleccionados */
-        .estado-abierto {
+        /* Estilo para el desplegable */
+        .custom-select-pill option {
+            background: rgba(40, 42, 54, 0.9);
+            color: #f8f8f2 !important;
+            padding: 0.5rem;
+        }
+
+        /* Colores para selects según estado/prioridad - solo aplica al select cerrado */
+        .custom-select-pill.status-abierto {
+            background: rgba(46, 213, 115, 0.15);
             color: #2ED573;
-            border-color: rgba(46, 213, 115, 0.4);
+            border: 1px solid rgba(46, 213, 115, 0.3);
         }
 
-        .estado-en_progreso {
+        .custom-select-pill.status-en_progreso {
+            background: rgba(30, 144, 255, 0.15);
             color: #1E90FF;
-            border-color: rgba(30, 144, 255, 0.4);
+            border: 1px solid rgba(30, 144, 255, 0.3);
         }
 
-        .estado-cerrado {
+        .custom-select-pill.status-cerrado {
+            background: rgba(162, 155, 254, 0.15);
             color: #A29BFE;
-            border-color: rgba(162, 155, 254, 0.4);
+            border: 1px solid rgba(162, 155, 254, 0.3);
         }
 
-        /* Colores para prioridades seleccionadas */
-        .prioridad-alta {
+        .custom-select-pill.priority-alta {
+            background: rgba(255, 71, 87, 0.15);
             color: #FF4757;
-            border-color: rgba(255, 71, 87, 0.4);
+            border: 1px solid rgba(255, 71, 87, 0.3);
         }
 
-        .prioridad-media {
+        .custom-select-pill.priority-media {
+            background: rgba(255, 193, 7, 0.15);
             color: #FFC107;
-            border-color: rgba(255, 193, 7, 0.4);
+            border: 1px solid rgba(255, 193, 7, 0.3);
         }
 
-        .prioridad-baja {
+        .custom-select-pill.priority-baja {
+            background: rgba(40, 167, 69, 0.15);
             color: #28A745;
-            border-color: rgba(40, 167, 69, 0.4);
-        }
-
-        /* Placeholder para selects */
-        .custom-select option[disabled][selected] {
-            color: #6272a4;
+            border: 1px solid rgba(40, 167, 69, 0.3);
         }
 
         /* Resto de tus estilos... */
@@ -229,14 +254,42 @@
             color: #f3f4f6;
         }
 
-        .message-user {
+        .message-user, .history-user {
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+        /* Colores para diferentes usuarios */
+        .user-color-1 {
             color: #50fa7b;
-            font-weight: 600;
+            background-color: rgba(80, 250, 123, 0.1);
         }
 
-        .message-time {
-            color: #6272a4;
-            font-size: 0.75rem;
+        .user-color-2 {
+            color: #ff79c6;
+            background-color: rgba(255, 121, 198, 0.1);
+        }
+
+        .user-color-3 {
+            color: #8be9fd;
+            background-color: rgba(139, 233, 253, 0.1);
+        }
+
+        .user-color-4 {
+            color: #bd93f9;
+            background-color: rgba(189, 147, 249, 0.1);
+        }
+
+        .user-color-5 {
+            color: #ffb86c;
+            background-color: rgba(255, 184, 108, 0.1);
+        }
+
+        .user-color-6 {
+            color: #f1fa8c;
+            background-color: rgba(241, 250, 140, 0.1);
         }
 
         .message-content {
@@ -249,32 +302,28 @@
             border: 1px solid rgba(68, 71, 90, 0.3);
         }
 
-        .history-user {
-            color: #bd93f9;
-            font-weight: 600;
-        }
 
-        .history-time {
-            color: #6272a4;
-            font-size: 0.75rem;
-        }
+        .message-time, .history-time {
+        color: #6272a4;
+        font-size: 0.75rem;
+    }
 
         .history-content {
             color: #f8f8f2;
         }
 
         .history-change {
-            color: #ff79c6;
-        }
+        color: #ff79c6;
+    }
 
-        .comment-closure {
-            color: #8be9fd;
-            font-style: italic;
-            background: rgba(139, 233, 253, 0.1);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            display: inline-block;
-        }
+    .comment-closure {
+        color: #8be9fd;
+        font-style: italic;
+        background: rgba(139, 233, 253, 0.1);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: inline-block;
+    }
 
         /* Ajustes para textarea */
         textarea {
@@ -322,6 +371,26 @@
                 font-size: 0.875rem;
             }
         }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Estilo para botón deshabilitado */
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
     </style>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -350,11 +419,11 @@
                     <tbody>
                         <tr class="table-row">
                             <td class="table-cell">
-                                <select wire:model="estado" name="estado" class="custom-select @if($estado) estado-{{ $estado }} @endif" required>
-                                    <option value="" disabled selected>Seleccione estado</option>
-                                    <option value="abierto">Abierto</option>
-                                    <option value="en_progreso">En Progreso</option>
-                                    <option value="cerrado">Cerrado</option>
+                                <select wire:model="estado" name="estado" class="custom-select-pill status-{{ $estado }}" required>
+                                    <option value="" disabled selected class="text-gray-400">Seleccione estado</option>
+                                    <option value="abierto" class="text-white">Abierto</option>
+                                    <option value="en_progreso" class="text-white">En Progreso</option>
+                                    <option value="cerrado" class="text-white">Cerrado</option>
                                 </select>
                                 @if($showComentarioField)
                                 <div class="mt-4">
@@ -365,11 +434,11 @@
                                 @endif
                             </td>
                             <td class="table-cell">
-                                <select wire:model="prioridad" name="prioridad" class="custom-select @if($prioridad) prioridad-{{ $prioridad }} @endif" required>
-                                    <option value="" disabled selected>Seleccione prioridad</option>
-                                    <option value="baja">Baja</option>
-                                    <option value="media">Media</option>
-                                    <option value="alta">Alta</option>
+                                <select wire:model="prioridad" name="prioridad" class="custom-select-pill priority-{{ strtolower($prioridad) }}" required>
+                                    <option value="" disabled selected class="text-gray-400">Seleccione prioridad</option>
+                                    <option value="baja" class="text-white">Baja</option>
+                                    <option value="media" class="text-white">Media</option>
+                                    <option value="alta" class="text-white">Alta</option>
                                 </select>
                             </td>
                             <td class="table-cell">
@@ -437,6 +506,7 @@
                 </div>
             </form>
 
+
             @if(Auth::user()->clase == 'jefe')
             <form wire:submit.prevent="asignarEncargado" class="mt-6">
                 @csrf
@@ -452,8 +522,15 @@
                     </select>
                 </div>
                 <div class="mt-4 text-center">
-                    <button type="submit" class="action-btn px-6 py-2 font-semibold">
-                        Asignar
+                    <button type="submit" class="action-btn px-6 py-2 font-semibold" wire:loading.attr="disabled" wire:target="asignarEncargado">
+                        <span wire:loading.remove wire:target="asignarEncargado">Asignar</span>
+                        <span wire:loading wire:target="asignarEncargado">
+                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Asignando...
+                        </span>
                     </button>
                 </div>
             </form>
@@ -538,7 +615,9 @@
                 @foreach ($messages as $message)
                 <div class="mb-4 pb-4 border-b border-gray-600 last:border-b-0">
                     <div class="flex justify-between items-start">
-                        <strong class="message-user">{{ $message['user']['name'] }}</strong>
+                        <strong class="message-user user-color-{{ $message['user']['id'] % 6 + 1 }}">
+                            {{ $message['user']['name'] }}
+                        </strong>
                         <small class="message-time">{{ \Carbon\Carbon::parse($message['created_at'])->diffForHumans() }}</small>
                     </div>
                     <p class="message-content mt-1">{{ $message['content'] }}</p>
@@ -551,8 +630,15 @@
                 <form wire:submit.prevent="enviarMensaje">
                     <textarea wire:model="messageContent" class="w-full"
                         placeholder="Escribe tu mensaje..." rows="3" required></textarea>
-                    <button type="submit" class="btn-enviar-mensaje">
-                        Enviar Mensaje
+                    <button type="submit" class="btn-enviar-mensaje" wire:loading.attr="disabled" wire:target="enviarMensaje">
+                        <span wire:loading.remove wire:target="enviarMensaje">Enviar Mensaje</span>
+                        <span wire:loading wire:target="enviarMensaje">
+                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Enviando...
+                        </span>
                     </button>
                 </form>
             </div>
@@ -566,7 +652,9 @@
                 @foreach ($ticket->ticketChanges as $change)
                 <div class="mb-4 pb-4 border-b border-gray-600 last:border-b-0">
                     <div class="flex justify-between">
-                        <strong class="history-user">{{ $change->user->name }}</strong>
+                        <strong class="history-user user-color-{{ $change->user->id % 6 + 1 }}">
+                            {{ $change->user->name }}
+                        </strong>
                         <span class="history-time">{{ $change->created_at->diffForHumans() }}</span>
                     </div>
 
@@ -692,18 +780,32 @@
                 // Para estado
                 const estadoSelect = document.querySelector('select[name="estado"]');
                 if (estadoSelect) {
-                    estadoSelect.className = 'custom-select';
+                    // Remover todas las clases de estado
+                    estadoSelect.classList.remove(
+                        'status-abierto',
+                        'status-en_progreso',
+                        'status-cerrado'
+                    );
+
+                    // Agregar la clase correspondiente al estado seleccionado
                     if (estadoSelect.value) {
-                        estadoSelect.classList.add(`estado-${estadoSelect.value}`);
+                        estadoSelect.classList.add(`status-${estadoSelect.value}`);
                     }
                 }
 
                 // Para prioridad
                 const prioridadSelect = document.querySelector('select[name="prioridad"]');
                 if (prioridadSelect) {
-                    prioridadSelect.className = 'custom-select';
+                    // Remover todas las clases de prioridad
+                    prioridadSelect.classList.remove(
+                        'priority-alta',
+                        'priority-media',
+                        'priority-baja'
+                    );
+
+                    // Agregar la clase correspondiente a la prioridad seleccionada
                     if (prioridadSelect.value) {
-                        prioridadSelect.classList.add(`prioridad-${prioridadSelect.value}`);
+                        prioridadSelect.classList.add(`priority-${prioridadSelect.value}`);
                     }
                 }
             });

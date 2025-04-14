@@ -267,7 +267,6 @@
                     <tr>
                         <th class="table-cell text-left">Asunto</th>
                         <th class="table-cell text-left">Estado</th>
-                        <th class="table-cell text-left">Prioridad</th>
                         <th class="table-cell text-left">Tipo</th>
                         <th class="table-cell text-left">Fecha</th>
                         <th class="table-cell text-right">Acciones</th>
@@ -280,11 +279,6 @@
                         <td class="table-cell">
                             <span class="status-pill status-{{ $ticket->estado }}">
                                 {{ ucfirst(str_replace('_', ' ', $ticket->estado)) }}
-                            </span>
-                        </td>
-                        <td class="table-cell">
-                            <span class="priority-tag priority-{{ strtolower($ticket->prioridad) }}">
-                                {{ ucfirst($ticket->prioridad) }}
                             </span>
                         </td>
                         <td class="table-cell text-gray-300">{{ ucfirst($ticket->tipo) }}</td>

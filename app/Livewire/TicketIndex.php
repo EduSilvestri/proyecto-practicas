@@ -36,7 +36,7 @@ class TicketIndex extends Component
         $userId = Auth::id();  // ID del usuario autenticado
 
         // Inicializar la consulta para los tickets
-        $tickets = Ticket::query();
+        $tickets = Ticket::query()->latest();
 
         // Filtrar los tickets según el rol del usuario
         if ($userRol == 'usuario') {

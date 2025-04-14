@@ -82,7 +82,7 @@ class HomeTicketForm extends Component
         'asunto'      => $this->asunto,
         'tipo'        => $this->tipo,
         'descripcion' => $this->descripcion,
-        'estado'      => 'abierto',
+        'estado'      => 'esperando',
         'prioridad'   => 'media',
         'archivos'    => !empty($archivosPaths) ? json_encode($archivosPaths) : null,
     ]);
