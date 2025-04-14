@@ -6,14 +6,7 @@
             color: #f3f4f6;
         }
 
-        .glass-card {
-            background: rgba(23, 23, 26, 0.9);
-            backdrop-filter: blur(12px);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.36);
-        }
-
+        /* Recuadro de descripción */
         .descripcion-box {
             background: rgba(40, 42, 54, 0.7);
             border: 1px solid rgba(68, 71, 90, 0.3);
@@ -21,6 +14,75 @@
             padding: 1.5rem;
             margin-top: 1rem;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Selects personalizados */
+        .custom-select {
+            background: rgba(40, 42, 54, 0.9);
+            border: 1px solid rgba(68, 71, 90, 0.5);
+            color: #f8f8f2; /* Color de texto neutro */
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236272a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+
+        .custom-select:focus {
+            border-color: #bd93f9;
+            box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.2);
+            outline: none;
+        }
+
+        /* Colores para estados seleccionados */
+        .estado-abierto {
+            color: #2ED573;
+            border-color: rgba(46, 213, 115, 0.4);
+        }
+
+        .estado-en_progreso {
+            color: #1E90FF;
+            border-color: rgba(30, 144, 255, 0.4);
+        }
+
+        .estado-cerrado {
+            color: #A29BFE;
+            border-color: rgba(162, 155, 254, 0.4);
+        }
+
+        /* Colores para prioridades seleccionadas */
+        .prioridad-alta {
+            color: #FF4757;
+            border-color: rgba(255, 71, 87, 0.4);
+        }
+
+        .prioridad-media {
+            color: #FFC107;
+            border-color: rgba(255, 193, 7, 0.4);
+        }
+
+        .prioridad-baja {
+            color: #28A745;
+            border-color: rgba(40, 167, 69, 0.4);
+        }
+
+        /* Placeholder para selects */
+        .custom-select option[disabled][selected] {
+            color: #6272a4;
+        }
+
+        /* Resto de tus estilos... */
+        .glass-card {
+            background: rgba(23, 23, 26, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.36);
         }
 
         .table-header {
@@ -214,54 +276,6 @@
             display: inline-block;
         }
 
-        /* Ajustes para select inputs */
-        select {
-            background: rgba(40, 42, 54, 0.9);
-            border: 1px solid rgba(68, 71, 90, 0.5);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            width: 100%;
-        }
-
-        /* Estilos para selects de estado */
-        select[name="estado"] option[value="abierto"] {
-            background: rgba(46, 213, 115, 0.2);
-            color: #2ED573;
-        }
-
-        select[name="estado"] option[value="en_progreso"] {
-            background: rgba(30, 144, 255, 0.2);
-            color: #1E90FF;
-        }
-
-        select[name="estado"] option[value="cerrado"] {
-            background: rgba(162, 155, 254, 0.2);
-            color: #A29BFE;
-        }
-
-        /* Estilos para selects de prioridad */
-        select[name="prioridad"] option[value="alta"] {
-            background: rgba(255, 71, 87, 0.2);
-            color: #FF4757;
-        }
-
-        select[name="prioridad"] option[value="media"] {
-            background: rgba(255, 193, 7, 0.2);
-            color: #FFC107;
-        }
-
-        select[name="prioridad"] option[value="baja"] {
-            background: rgba(40, 167, 69, 0.2);
-            color: #28A745;
-        }
-
-        select:focus {
-            border-color: #bd93f9;
-            box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.2);
-            outline: none;
-        }
-
         /* Ajustes para textarea */
         textarea {
             background: rgba(40, 42, 54, 0.9);
@@ -311,7 +325,10 @@
     </style>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-4xl font-bold text-center text-white mb-12 pb-2 border-b border-gray-700">Detalles del Ticket</h2>
+        <!-- Título modificado para que coincida con el de index -->
+        <h2 class="text-5xl md:text-6xl !text-5xl !md:text-6xl font-bold text-center text-white mb-10 md:mb-12 tracking-normal" style="font-size: 3rem !important; line-height: 1 !important; margin-bottom:2%;">
+            Detalles del Ticket
+        </h2>
 
         <div class="glass-card p-6 mb-8">
             <h3 class="text-2xl font-bold mb-4 text-center text-white">{{ $ticket->asunto }}</h3>
@@ -333,7 +350,8 @@
                     <tbody>
                         <tr class="table-row">
                             <td class="table-cell">
-                                <select wire:model="estado" name="estado" class="w-full" required>
+                                <select wire:model="estado" name="estado" class="custom-select @if($estado) estado-{{ $estado }} @endif" required>
+                                    <option value="" disabled selected>Seleccione estado</option>
                                     <option value="abierto">Abierto</option>
                                     <option value="en_progreso">En Progreso</option>
                                     <option value="cerrado">Cerrado</option>
@@ -347,14 +365,16 @@
                                 @endif
                             </td>
                             <td class="table-cell">
-                                <select wire:model="prioridad" name="prioridad" class="w-full" required>
+                                <select wire:model="prioridad" name="prioridad" class="custom-select @if($prioridad) prioridad-{{ $prioridad }} @endif" required>
+                                    <option value="" disabled selected>Seleccione prioridad</option>
                                     <option value="baja">Baja</option>
                                     <option value="media">Media</option>
                                     <option value="alta">Alta</option>
                                 </select>
                             </td>
                             <td class="table-cell">
-                                <select wire:model="tipo" name="tipo" class="w-full" required>
+                                <select wire:model="tipo" name="tipo" class="custom-select" required>
+                                    <option value="" disabled selected>Seleccione tipo</option>
                                     @foreach ($roles as $role => $name)
                                     @foreach ($tiposPorRol[$role] as $tipoOption)
                                     <option value="{{ $tipoOption }}">
@@ -371,8 +391,9 @@
 
                 <div class="mt-8">
                     <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
+                    <!-- Recuadro de descripción mejorado -->
                     <div class="descripcion-box">
-                    <p class="text-white mt-2">{{ $ticket->descripcion }}</p>
+                        <p class="text-white">{{ $ticket->descripcion }}</p>
                     </div>
                 </div>
 
@@ -421,7 +442,8 @@
                 @csrf
                 <div class="text-center">
                     <label for="encargado_id" class="block text-white mb-2">Asignar encargado:</label>
-                    <select wire:model="encargado_id" id="encargado_id" class="w-full max-w-md mx-auto">
+                    <select wire:model="encargado_id" id="encargado_id" class="custom-select w-full max-w-md mx-auto">
+                        <option value="" selected>Seleccione un encargado</option>
                         @foreach ($usuariosMismoRol as $usuario)
                         <option value="{{ $usuario->id }}" {{ $ticket->encargado_id == $usuario->id ? 'selected' : '' }}>
                             {{ $usuario->name }}
@@ -462,9 +484,10 @@
 
             <div class="mt-8">
                 <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
+                <!-- Recuadro de descripción mejorado para usuarios normales -->
                 <div class="descripcion-box">
-                    <p class="text-white mt-2">{{ $ticket->descripcion }}</p>
-                    </div>
+                    <p class="text-white">{{ $ticket->descripcion }}</p>
+                </div>
             </div>
 
             <!-- Sección para visualizar archivos adjuntos y capturas de pantalla -->
@@ -534,17 +557,6 @@
                 </form>
             </div>
         </div>
-
-        @push('scripts')
-        <script>
-            document.addEventListener('livewire:initialized', () => {
-                Livewire.on('scrollToMessage', () => {
-                    const container = document.getElementById('messagesContainer');
-                    container.scrollTop = 0;
-                });
-            });
-        </script>
-        @endpush
 
         <!-- Historial de cambios -->
         @if(Auth::user()->rol !== 'usuario')
@@ -672,6 +684,27 @@
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
                     closeModal();
+                }
+            });
+
+            // Actualizar clases de selects cuando cambian
+            Livewire.hook('message.processed', (message, component) => {
+                // Para estado
+                const estadoSelect = document.querySelector('select[name="estado"]');
+                if (estadoSelect) {
+                    estadoSelect.className = 'custom-select';
+                    if (estadoSelect.value) {
+                        estadoSelect.classList.add(`estado-${estadoSelect.value}`);
+                    }
+                }
+
+                // Para prioridad
+                const prioridadSelect = document.querySelector('select[name="prioridad"]');
+                if (prioridadSelect) {
+                    prioridadSelect.className = 'custom-select';
+                    if (prioridadSelect.value) {
+                        prioridadSelect.classList.add(`prioridad-${prioridadSelect.value}`);
+                    }
                 }
             });
         });
