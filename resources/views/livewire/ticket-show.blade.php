@@ -1,26 +1,339 @@
-<div>
-    <div class="flex justify-center items-center min-h-screen bg-lujoYel-100">
-        <div class="bg-lujoNeg p-6 rounded-lg shadow-lg w-[80%]">
-            <h2 class="text-2xl font-bold mb-4 text-center text-white">{{ $ticket->asunto }}</h2>
+<div class="min-h-screen bg-gray-900 py-8">
+    <style>
+        /* Estilos personalizados premium mejorados */
+        body {
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+
+        .glass-card {
+            background: rgba(23, 23, 26, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.36);
+        }
+
+        .descripcion-box {
+            background: rgba(40, 42, 54, 0.7);
+            border: 1px solid rgba(68, 71, 90, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, rgba(40, 42, 54, 0.95) 0%, rgba(30, 32, 42, 0.95) 100%);
+            color: #f8f8f2;
+            border-bottom: 1px solid rgba(68, 71, 90, 0.5);
+        }
+
+        .table-row {
+            background: rgba(40, 42, 54, 0.7);
+            border-bottom: 1px solid rgba(68, 71, 90, 0.3);
+        }
+
+        .table-cell {
+            border-right: 1px solid rgba(68, 71, 90, 0.2);
+            padding: 1.25rem;
+            color: #f3f4f6;
+        }
+
+        .table-cell:last-child {
+            border-right: none;
+        }
+
+        .action-btn {
+            background: rgba(80, 250, 123, 0.1);
+            color: #50fa7b;
+            border: 1px solid rgba(80, 250, 123, 0.3);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover {
+            background: rgba(80, 250, 123, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(80, 250, 123, 0.15);
+        }
+
+        .btn-volver {
+            background: rgba(255, 71, 87, 0.1);
+            color: #FF4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover {
+            background: rgba(255, 71, 87, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.15);
+        }
+
+        /* ESTILOS PARA ESTADOS (COLORES) */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.375rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-esperando {
+            background: rgba(255, 159, 67, 0.15);
+            color: #FF9F43;
+            border: 1px solid rgba(255, 159, 67, 0.3);
+        }
+
+        .status-abierto {
+            background: rgba(46, 213, 115, 0.15);
+            color: #2ED573;
+            border: 1px solid rgba(46, 213, 115, 0.3);
+        }
+
+        .status-en_progreso {
+            background: rgba(30, 144, 255, 0.15);
+            color: #1E90FF;
+            border: 1px solid rgba(30, 144, 255, 0.3);
+        }
+
+        .status-cerrado {
+            background: rgba(162, 155, 254, 0.15);
+            color: #A29BFE;
+            border: 1px solid rgba(162, 155, 254, 0.3);
+        }
+
+        /* ESTILOS PARA PRIORIDADES (COLORES) */
+        .priority-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.375rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid transparent;
+        }
+
+        .priority-alta {
+            background: rgba(255, 71, 87, 0.15);
+            color: #FF4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        .priority-media {
+            background: rgba(255, 193, 7, 0.15);
+            color: #FFC107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .priority-baja {
+            background: rgba(40, 167, 69, 0.15);
+            color: #28A745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        /* Estilos para el modal de imágenes */
+        .image-modal {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(12px);
+        }
+
+        .modal-content {
+            background: rgba(23, 23, 26, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilos para la sección de conversación */
+        .conversation-container {
+            background: rgba(40, 42, 54, 0.7);
+            border: 1px solid rgba(68, 71, 90, 0.3);
+            color: #f3f4f6;
+        }
+
+        .message-user {
+            color: #50fa7b;
+            font-weight: 600;
+        }
+
+        .message-time {
+            color: #6272a4;
+            font-size: 0.75rem;
+        }
+
+        .message-content {
+            color: #f8f8f2;
+        }
+
+        /* Estilos para el historial de cambios */
+        .history-container {
+            background: rgba(40, 42, 54, 0.7);
+            border: 1px solid rgba(68, 71, 90, 0.3);
+        }
+
+        .history-user {
+            color: #bd93f9;
+            font-weight: 600;
+        }
+
+        .history-time {
+            color: #6272a4;
+            font-size: 0.75rem;
+        }
+
+        .history-content {
+            color: #f8f8f2;
+        }
+
+        .history-change {
+            color: #ff79c6;
+        }
+
+        .comment-closure {
+            color: #8be9fd;
+            font-style: italic;
+            background: rgba(139, 233, 253, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Ajustes para select inputs */
+        select {
+            background: rgba(40, 42, 54, 0.9);
+            border: 1px solid rgba(68, 71, 90, 0.5);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            width: 100%;
+        }
+
+        /* Estilos para selects de estado */
+        select[name="estado"] option[value="abierto"] {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ED573;
+        }
+
+        select[name="estado"] option[value="en_progreso"] {
+            background: rgba(30, 144, 255, 0.2);
+            color: #1E90FF;
+        }
+
+        select[name="estado"] option[value="cerrado"] {
+            background: rgba(162, 155, 254, 0.2);
+            color: #A29BFE;
+        }
+
+        /* Estilos para selects de prioridad */
+        select[name="prioridad"] option[value="alta"] {
+            background: rgba(255, 71, 87, 0.2);
+            color: #FF4757;
+        }
+
+        select[name="prioridad"] option[value="media"] {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+        }
+
+        select[name="prioridad"] option[value="baja"] {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28A745;
+        }
+
+        select:focus {
+            border-color: #bd93f9;
+            box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.2);
+            outline: none;
+        }
+
+        /* Ajustes para textarea */
+        textarea {
+            background: rgba(40, 42, 54, 0.9);
+            border: 1px solid rgba(68, 71, 90, 0.5);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            width: 100%;
+        }
+
+        textarea:focus {
+            border-color: #bd93f9;
+            box-shadow: 0 0 0 2px rgba(189, 147, 249, 0.2);
+            outline: none;
+        }
+
+        /* Botón de enviar mensaje más pequeño y centrado */
+        .btn-enviar-mensaje {
+            background: rgba(80, 250, 123, 0.1);
+            color: #50fa7b;
+            border: 1px solid rgba(80, 250, 123, 0.3);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0.5rem auto 0;
+            width: auto;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .btn-enviar-mensaje:hover {
+            background: rgba(80, 250, 123, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(80, 250, 123, 0.15);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 767px) {
+            .table-cell {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-bold text-center text-white mb-12 pb-2 border-b border-gray-700">Detalles del Ticket</h2>
+
+        <div class="glass-card p-6 mb-8">
+            <h3 class="text-2xl font-bold mb-4 text-center text-white">{{ $ticket->asunto }}</h3>
 
             @if(!Auth::user()->isUser())
             <form wire:submit.prevent="actualizar">
                 @csrf
                 @method('PUT')
                 <!-- Tabla para mostrar los detalles del ticket -->
-                <table class="w-full mt-4 border-collapse border">
-                    <thead>
-                        <tr class="bg-lujoNeg text-white">
-                            <th class="border p-2">Estado</th>
-                            <th class="border p-2">Prioridad</th>
-                            <th class="border p-2">Derivar</th>
-                            <th class="border p-2">Fecha de Creación</th>
+                <table class="w-full mt-4">
+                    <thead class="table-header">
+                        <tr>
+                            <th class="table-cell text-center">Estado</th>
+                            <th class="table-cell text-center">Prioridad</th>
+                            <th class="table-cell text-center">Derivar</th>
+                            <th class="table-cell text-center">Fecha de Creación</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-gray-800">
-                        <tr class="border">
-                            <td class="border p-2 text-center text-black">
-                                <select wire:model="estado" name="estado" class="border rounded p-2 w-full" required>
+                    <tbody>
+                        <tr class="table-row">
+                            <td class="table-cell">
+                                <select wire:model="estado" name="estado" class="w-full" required>
                                     <option value="abierto">Abierto</option>
                                     <option value="en_progreso">En Progreso</option>
                                     <option value="cerrado">Cerrado</option>
@@ -28,20 +341,20 @@
                                 @if($showComentarioField)
                                 <div class="mt-4">
                                     <label class="block text-white">Comentario de Cierre (Obligatorio)</label>
-                                    <textarea wire:model="comentario" class="border rounded p-2 w-full"
+                                    <textarea wire:model="comentario" class="w-full"
                                         placeholder="Ingrese el motivo del cierre" required></textarea>
                                 </div>
                                 @endif
                             </td>
-                            <td class="border p-2 text-center">
-                                <select wire:model="prioridad" name="prioridad" class="border rounded p-2 w-full" required>
+                            <td class="table-cell">
+                                <select wire:model="prioridad" name="prioridad" class="w-full" required>
                                     <option value="baja">Baja</option>
                                     <option value="media">Media</option>
                                     <option value="alta">Alta</option>
                                 </select>
                             </td>
-                            <td class="border p-2 text-center">
-                                <select wire:model="tipo" name="tipo" class="border rounded p-2 w-full" required>
+                            <td class="table-cell">
+                                <select wire:model="tipo" name="tipo" class="w-full" required>
                                     @foreach ($roles as $role => $name)
                                     @foreach ($tiposPorRol[$role] as $tipoOption)
                                     <option value="{{ $tipoOption }}">
@@ -51,31 +364,35 @@
                                     @endforeach
                                 </select>
                             </td>
-                            <td class="border p-2 text-center text-white">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td class="table-cell text-center">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div class="mt-8">
                     <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
-                    <p class="text-white">{{ $ticket->descripcion }}</p>
+                    <div class="descripcion-box">
+                    <p class="text-white mt-2">{{ $ticket->descripcion }}</p>
+                    </div>
                 </div>
 
                 <!-- Sección para visualizar archivos adjuntos -->
-                <!-- Sección para visualizar archivos adjuntos -->
                 @if($files && count($files) > 0)
                 <div class="mt-8">
-                    <h3 class="text-xl text-center font-semibold text-white">Archivos Adjuntos y Capturas</h3>
-                    <div class="flex justify-center space-x-4 mt-2 flex-wrap">
+                    <h3 class="text-xl font-semibold text-white text-center">Archivos Adjuntos y Capturas</h3>
+                    <div class="flex flex-wrap justify-center gap-4 mt-4">
                         @foreach($files as $file)
-                        <div class="text-white mb-4">
+                        <div class="text-white">
                             @if(in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
                             <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px;"
-                                class="mb-2 cursor-pointer"
+                                class="mb-2 cursor-pointer rounded border border-gray-700"
                                 onclick="openModal('{{ asset('storage/' . $file) }}')">
                             @else
                             <a href="{{ asset('storage/' . $file) }}" target="_blank"
-                                class="text-lujoYel hover:underline block mb-2">
+                                class="action-btn inline-flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                </svg>
                                 {{ basename($file) }}
                             </a>
                             @endif
@@ -84,27 +401,27 @@
                     </div>
                 </div>
                 @else
-                <p class="mt-4 text-white">No hay archivos adjuntos.</p>
+                <p class="mt-4 text-white text-center">No hay archivos adjuntos.</p>
                 @endif
 
-                <div class="mt-6 text-center">
+                <div class="mt-6 flex justify-center gap-4">
                     <button type="button" wire:click="volverALaLista"
-                        class="bg-red-500 text-white px-4 py-2 rounded mr-4">
+                        class="btn-volver px-6 py-2 rounded-lg font-semibold">
                         Volver a la lista
                     </button>
                     <button type="submit"
-                        class="px-6 py-2 bg-lujoYel text-black font-semibold rounded-lg hover:bg-blue-800 transition">
+                        class="action-btn px-6 py-2 font-semibold">
                         Guardar cambios
                     </button>
                 </div>
             </form>
 
             @if(Auth::user()->clase == 'jefe')
-            <form wire:submit.prevent="asignarEncargado">
+            <form wire:submit.prevent="asignarEncargado" class="mt-6">
                 @csrf
-                <div class="mt-6 text-center">
-                    <label for="encargado_id" class="text-white block mb-2">Asignar encargado:</label>
-                    <select wire:model="encargado_id" id="encargado_id" class="border rounded p-2 w-full">
+                <div class="text-center">
+                    <label for="encargado_id" class="block text-white mb-2">Asignar encargado:</label>
+                    <select wire:model="encargado_id" id="encargado_id" class="w-full max-w-md mx-auto">
                         @foreach ($usuariosMismoRol as $usuario)
                         <option value="{{ $usuario->id }}" {{ $ticket->encargado_id == $usuario->id ? 'selected' : '' }}>
                             {{ $usuario->name }}
@@ -112,8 +429,8 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="mt-6 text-center">
-                    <button type="submit" class="inline-block px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
+                <div class="mt-4 text-center">
+                    <button type="submit" class="action-btn px-6 py-2 font-semibold">
                         Asignar
                     </button>
                 </div>
@@ -122,149 +439,163 @@
 
             @else
             <!-- Vista para usuarios normales -->
-            <table class="w-full mt-4 border-collapse border">
-                <thead>
-                    <tr class="bg-lujoNeg text-white">
-                        <th class="border p-2">Estado</th>
-                        <th class="border p-2">Tipo</th>
-                        <th class="border p-2">Fecha de Creación</th>
+            <table class="w-full mt-4">
+                <thead class="table-header">
+                    <tr>
+                        <th class="table-cell text-center">Estado</th>
+                        <th class="table-cell text-center">Tipo</th>
+                        <th class="table-cell text-center">Fecha de Creación</th>
                     </tr>
                 </thead>
-                <tbody class="bg-gray-800">
-                    <tr class="border">
-                        <td class="border p-2 text-center text-white">{{ ucfirst(str_replace('_', ' ', $ticket->estado)) }}</td>
-                        <td class="border p-2 text-center text-white">{{ ucfirst($ticket->tipo) }}</td>
-                        <td class="border p-2 text-center text-white">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
+                <tbody>
+                    <tr class="table-row">
+                        <td class="table-cell text-center">
+                            <span class="status-pill status-{{ $ticket->estado }}">
+                                {{ ucfirst(str_replace('_', ' ', $ticket->estado)) }}
+                            </span>
+                        </td>
+                        <td class="table-cell text-center">{{ ucfirst($ticket->tipo) }}</td>
+                        <td class="table-cell text-center">{{ $ticket->created_at->format('d-m-Y H:i:s') }}</td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="mt-8">
                 <h3 class="text-xl font-semibold text-white text-center">Descripción</h3>
-                <p class="text-white">{{ $ticket->descripcion }}</p>
+                <div class="descripcion-box">
+                    <p class="text-white mt-2">{{ $ticket->descripcion }}</p>
+                    </div>
             </div>
 
             <!-- Sección para visualizar archivos adjuntos y capturas de pantalla -->
             @if($ticket->archivos)
             @if($files && count($files) > 0)
             <div class="mt-8">
-                <h3 class="text-xl text-center font-semibold text-white">Archivos Adjuntos y Capturas de Pantalla</h3>
-                <div class="flex justify-center space-x-4 mt-2">
+                <h3 class="text-xl font-semibold text-white text-center">Archivos Adjuntos y Capturas de Pantalla</h3>
+                <div class="flex flex-wrap justify-center gap-4 mt-4">
                     @foreach($files as $file)
                     <div class="text-white">
                         @if(in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
-                        <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px; padding: 2%;" class="mb-2 cursor-pointer" onclick="openModal('{{ asset('storage/' . $file) }}')">
-
+                        <img src="{{ asset('storage/' . $file) }}" alt="Adjunto" style="max-width: 150px;"
+                            class="mb-2 cursor-pointer rounded border border-gray-700"
+                            onclick="openModal('{{ asset('storage/' . $file) }}')">
                         @else
-                        <a href="{{ asset('storage/' . $file) }}" target="_blank" class="text-lujoYel hover:underline">{{ $file }}</a>
+                        <a href="{{ asset('storage/' . $file) }}" target="_blank"
+                            class="action-btn inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                            </svg>
+                            {{ basename($file) }}
+                        </a>
                         @endif
                     </div>
                     @endforeach
                 </div>
             </div>
             @else
-            <p class="mt-4 text-white">No hay archivos adjuntos.</p>
+            <p class="mt-4 text-white text-center">No hay archivos adjuntos.</p>
             @endif
             @else
-            <p class="mt-4 text-white">No hay archivos adjuntos.</p>
+            <p class="mt-4 text-white text-center">No hay archivos adjuntos.</p>
             @endif
 
             <div class="mt-6 text-center">
                 <button wire:click="volverALaLista"
-                    class="inline-block px-6 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
+                    class="action-btn px-6 py-2 font-semibold">
                     Volver a la lista
                 </button>
             </div>
             @endif
+        </div>
 
-            <!-- Sección de conversación -->
-            <div class="mt-8">
-                <h3 class="text-xl font-semibold text-white text-center">Conversación</h3>
-                <div class="bg-gray-700 p-4 rounded max-h-60 overflow-y-auto" id="messagesContainer">
-                    @foreach ($messages as $message)
-                    <div class="mb-2">
-                        <strong class="text-lujoYel">{{ $message['user']['name'] }}:</strong>
-                        <span class="text-white">{{ $message['content'] }}</span>
-                        <small class="block text-gray-400">{{ \Carbon\Carbon::parse($message['created_at'])->diffForHumans() }}</small>
+        <!-- Sección de conversación -->
+        <div class="glass-card p-6 mb-8">
+            <h3 class="text-xl font-semibold text-white text-center mb-4">Conversación</h3>
+            <div class="conversation-container p-4 rounded-lg max-h-60 overflow-y-auto" id="messagesContainer">
+                @foreach ($messages as $message)
+                <div class="mb-4 pb-4 border-b border-gray-600 last:border-b-0">
+                    <div class="flex justify-between items-start">
+                        <strong class="message-user">{{ $message['user']['name'] }}</strong>
+                        <small class="message-time">{{ \Carbon\Carbon::parse($message['created_at'])->diffForHumans() }}</small>
                     </div>
-                    @endforeach
+                    <p class="message-content mt-1">{{ $message['content'] }}</p>
                 </div>
+                @endforeach
             </div>
 
             <!-- Formulario de mensaje -->
             <div class="mt-4">
                 <form wire:submit.prevent="enviarMensaje">
-                    <textarea wire:model="messageContent" class="w-full p-2 rounded"
+                    <textarea wire:model="messageContent" class="w-full"
                         placeholder="Escribe tu mensaje..." rows="3" required></textarea>
-                    <button type="submit" class="mt-2 w-full px-4 py-2 bg-lujoYel text-lujoNeg font-semibold rounded-lg hover:bg-lujoNeg hover:text-lujoYel transition">
+                    <button type="submit" class="btn-enviar-mensaje">
                         Enviar Mensaje
                     </button>
                 </form>
             </div>
-
-            @push('scripts')
-            <script>
-                document.addEventListener('livewire:initialized', () => {
-                    Livewire.on('scrollToMessage', () => {
-                        const container = document.getElementById('messagesContainer');
-                        container.scrollTop = 0; // Se desplaza al inicio donde están los nuevos mensajes
-                    });
-                });
-            </script>
-            @endpush
-
-            <!-- Historial de cambios -->
-            @if(Auth::user()->rol !== 'usuario')
-            <div class="mt-8 bg-lujoNeg p-6 rounded-lg shadow-lg">
-                <h3 class="text-xl font-semibold text-white text-center">Historial de Cambios</h3>
-                <div class="bg-gray-700 p-4 rounded max-h-60 overflow-y-auto">
-                    @foreach ($ticket->ticketChanges as $change)
-                    <div class="mb-4 pb-4 border-b border-gray-600">
-                        <div class="flex justify-between">
-                            <strong class="text-lujoYel">{{ $change->user->name }}</strong>
-                            <span class="text-gray-400 text-sm">{{ $change->created_at->diffForHumans() }}</span>
-                        </div>
-
-                        <p class="text-white mt-1">
-                            @if($change->change_type === 'comentario_cierre')
-                            Agregó comentario de cierre:
-                            @else
-                            Cambió {{ $change->change_type }} de
-                            <span class="font-bold">{{ strtoupper($change->old_value) }}</span> a
-                            <span class="font-bold">{{ strtoupper($change->new_value) }}</span>
-                            @endif
-                        </p>
-
-                        {{-- Mostrar comentario SOLO si es un cambio de tipo comentario_cierre --}}
-                        @if($change->change_type === 'comentario_cierre')
-                        <div class="mt-2 p-2 bg-gray-700 rounded">
-                            <p class="text-white">{{ $change->new_value }}</p>
-                        </div>
-                        @endif
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
         </div>
+
+        @push('scripts')
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+                Livewire.on('scrollToMessage', () => {
+                    const container = document.getElementById('messagesContainer');
+                    container.scrollTop = 0;
+                });
+            });
+        </script>
+        @endpush
+
+        <!-- Historial de cambios -->
+        @if(Auth::user()->rol !== 'usuario')
+        <div class="glass-card p-6">
+            <h3 class="text-xl font-semibold text-white text-center mb-4">Historial de Cambios</h3>
+            <div class="history-container p-4 rounded-lg max-h-60 overflow-y-auto">
+                @foreach ($ticket->ticketChanges as $change)
+                <div class="mb-4 pb-4 border-b border-gray-600 last:border-b-0">
+                    <div class="flex justify-between">
+                        <strong class="history-user">{{ $change->user->name }}</strong>
+                        <span class="history-time">{{ $change->created_at->diffForHumans() }}</span>
+                    </div>
+
+                    <p class="history-content mt-1">
+                        @if($change->change_type === 'comentario_cierre')
+                        <span class="comment-closure">Agregó comentario de cierre:</span>
+                        @else
+                        Cambió <span class="history-change">{{ $change->change_type }}</span> de
+                        <span class="font-bold">{{ strtoupper($change->old_value) }}</span> a
+                        <span class="font-bold">{{ strtoupper($change->new_value) }}</span>
+                        @endif
+                    </p>
+
+                    @if($change->change_type === 'comentario_cierre')
+                    <div class="mt-2 p-2 bg-gray-700 rounded">
+                        <p class="text-white">{{ $change->new_value }}</p>
+                    </div>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
     </div>
 
     <!-- Modal para imágenes -->
-    <div id="imageModal" class="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-90 hidden z-[9999] backdrop-blur-sm p-4">
-        <div class="relative bg-lujoNeg rounded-lg shadow-xl w-full h-full max-w-[95vw] max-h-[95vh] md:max-w-[90vw] md:max-h-[90vh] flex flex-col">
+    <div id="imageModal" class="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-90 hidden z-[9999] backdrop-blur-sm p-4 image-modal">
+        <div class="relative bg-lujoNeg rounded-lg shadow-xl w-full h-full max-w-[95vw] max-h-[95vh] md:max-w-[90vw] md:max-h-[90vh] flex flex-col modal-content">
             <!-- Header del modal -->
             <div class="flex justify-between items-center p-3 md:p-4 border-b border-gray-700">
                 <h3 class="text-sm md:text-lg font-semibold text-lujoYel truncate max-w-[50%]" id="modalTitle">Vista previa</h3>
                 <div class="flex space-x-2">
                     <a id="downloadLink" href="" download
-                        class="px-2 py-1 md:px-4 md:py-2 bg-lujoYel text-lujoNeg text-xs md:text-base font-medium rounded-md hover:bg-yellow-400 transition flex items-center">
+                        class="action-btn px-3 py-1 md:px-4 md:py-2 text-xs md:text-base font-medium rounded-md flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 mr-1 md:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
                         <span class="hidden sm:inline">Descargar</span>
                     </a>
                     <button onclick="closeModal()"
-                        class="px-2 py-1 md:px-4 md:py-2 bg-gray-700 text-white text-xs md:text-base font-medium rounded-md hover:bg-gray-600 transition flex items-center">
+                        class="btn-volver px-3 py-1 md:px-4 md:py-2 text-xs md:text-base font-medium rounded-md flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -373,3 +704,4 @@
             });
         });
     </script>
+</div>
