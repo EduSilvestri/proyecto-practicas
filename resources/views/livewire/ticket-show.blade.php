@@ -421,6 +421,7 @@
                             <td class="table-cell">
                                 <select wire:model="estado" name="estado" class="custom-select-pill status-{{ $estado }}" required>
                                     <option value="" disabled selected class="text-gray-400">Seleccione estado</option>
+                                    <option value="esperando" class="text-white">Esperando</option>
                                     <option value="abierto" class="text-white">Abierto</option>
                                     <option value="en_progreso" class="text-white">En Progreso</option>
                                     <option value="cerrado" class="text-white">Cerrado</option>
