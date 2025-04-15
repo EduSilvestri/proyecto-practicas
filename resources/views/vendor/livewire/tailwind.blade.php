@@ -9,12 +9,12 @@
                     </svg>
                 </span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" wire:navigate
+                <button wire:click="previousPage" wire:loading.attr="disabled"
                    class="pagination-item pagination-arrow hover:bg-purple-500/10 hover:text-purple-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
-                </a>
+                </button>
             @endif
 
             {{-- Pagination Elements --}}
@@ -34,10 +34,10 @@
                                 {{ $page }}
                             </span>
                         @else
-                            <a href="{{ $url }}" wire:navigate
+                            <button wire:click="gotoPage({{ $page }})"
                                class="pagination-item hover:bg-gray-700/50 hover:text-purple-300">
                                 {{ $page }}
-                            </a>
+                            </button>
                         @endif
                     @endforeach
                 @endif
@@ -45,12 +45,12 @@
 
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" wire:navigate
+                <button wire:click="nextPage" wire:loading.attr="disabled"
                    class="pagination-item pagination-arrow hover:bg-purple-500/10 hover:text-purple-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
-                </a>
+                </button>
             @else
                 <span class="pagination-item disabled pagination-arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

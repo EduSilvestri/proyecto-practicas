@@ -19,7 +19,13 @@ class TicketIndex extends Component
     public $estado = null;  // Variable para el filtro de estado
     public $q = null;       // Variable para el filtro de búsqueda
 
-    protected $paginationTheme = 'bootstrap';  // Usar el tema de paginación bootstrap
+    protected $paginationTheme = 'tailwind';  // Usar el tema de paginación bootstrap
+
+    protected $queryString = [
+        'estado' => ['except' => ''],
+        'q' => ['except' => ''],
+        'page' => ['except' => 1],
+    ];
 
     public function mount(Request $request)
     {
@@ -79,7 +85,7 @@ class TicketIndex extends Component
         }
 
         // Obtener los tickets con paginación y pasar los filtros de búsqueda
-        $tickets = $tickets->with('user', 'encargado')->paginate(10)->appends(request()->query());
+        $tickets = $tickets->with('user', 'encargado')->paginate(10);
 
         return view('livewire.ticket-index', [
             'tickets' => $tickets,
